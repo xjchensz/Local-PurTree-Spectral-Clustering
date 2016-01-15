@@ -3,7 +3,7 @@
 %
 %%
 clc;
-clear all;
+%clear all;
 
 folder_now = pwd;
 addpath([folder_now,'\test']);
@@ -15,8 +15,9 @@ for i=1:level
     D(:,:,i)=num;
 end
 
-testD=LPT(D,2,15,1);
-
+[y, P, W, evs]=LPT(D,2,15,1);
+y;
+W;
 
 
 %%

@@ -1,4 +1,4 @@
-function [y, A, evs] = LPT(D, c, k, islocal)
+function [y, P, W, evs] = LPT(D, c, k, islocal, eta)
 
 % D: level*num*num distance matrix, each sub matrix ia the level distance matrix
 % c: number of clusters
@@ -32,8 +32,13 @@ if nargin<4
     islocal=1;
 end;
 
-[dist, idx] = sort(D(:,:,1),2);
+if nargin<5
+    eta=1;
+end;
+
+[~, idx] = sort(D(:,:,1),2);
 idx=idx(:,2:k+2);
+Z=zeros(num,k+1,level);
 for i = 1:num
     Z(i,:,:)=D(i,idx(i,:),:);
 end
@@ -47,6 +52,7 @@ dist=computeWeightDistance(W,Z);%local dist--weight distance
 distK_1=dist(:,k+1);
 idx=idx(:,1:k);
 dist=dist(:,1:k);
+Z=Z(:,1:k,:);
 if islocal==0
     distX=computeWeightDistance(W,D);%full dist--weight distance
 end
@@ -70,63 +76,55 @@ lambda = mean(rr);
 P0 = (P+P')/2;
 D0 = diag(sum(P0));
 L0 = D0 - P0;
-[F, temp, evs]=eig1(L0, c, 0);
+[F, ~, evs]=eig1(L0, c, 0);
 
-if sum(evs(1:c+1)) < 0.00000000001
-    error('The original graph has more than %d connected component', c);
-end;
+% if sum(evs(1:c+1)) < 0.00000000001
+%     error('The original graph has more than %d connected component', c);
+% end;
 
 for iter = 1:NITER
-    % compute F
-    if iter>1
-       [F, temp, evs]=eig1(L0, c, 0); 
-    end
     
+
     % compute weights
     W=zeros(level,1);
     for l=1:level
         for i=1:num
-            W(l,1)= W(l,1)+sum(Z(i,1:k,l).*P(i,idx(i,:)));
+            W(l,1)= W(l,1)+sum(Z(i,:,l).*P(i,idx(i,:)));
         end
     end
-    W=1/level+0.5*(mean(W)-W);
+    W=expNorm(-W/eta);
    
     %update distance
     
     if islocal
         dist=computeWeightDistance(W,Z);%local dist--weight distance
-        distK_1=dist(:,k+1);
-        dist=dist(:,1:k);
     else
         distX=computeWeightDistance(W,D);%full dist--weight distance
     end
 
-    
-    % compute gamma
-    
     % compute P
     distf = L2_distance_1(F',F');
     
-    A = zeros(num);
     for i=1:num
         if islocal == 1
             id=idx(i,:);
             dfi = distf(i,id);
-            E=-(dist(i,:)+lambda*dfi)/(2*r);
-            E = E-mean(E) + 1/k;
+            E=(dist(i,:)+lambda*dfi)/(2*r);
+            E = mean(E)-E + 1/k;
             P(i,id) = positiveNorm(E);
         else
-            E=-(distX(i,:)+lambda*distf)/(2*r);
-            P(i) = EProjSimplex_new(E);
+            E=-(distX(i,:)+lambda*distf(i,:))/(2*r);
+            E = mean(E)-E + 1/num;
+            P(i,:) = positiveNorm(E);
         end;
     end;
     
-    
-    A = (A+A')/2;
-    D = diag(sum(A));
-    L = D-A;
+    % compute F
+    P0 = (P+P')/2;
+    D0 = diag(sum(P0));
+    L0 = D0 - P0;
     F_old = F;
-    [F, temp, ev]=eig1(L, c, 0);
+    [F, ~, ev]=eig1(L0, c, 0);
     evs(:,iter+1) = ev;
     
     fn1 = sum(ev(1:c));
@@ -142,9 +140,9 @@ for iter = 1:NITER
 end;
 
 %[labv, tem, y] = unique(round(0.1*round(1000*F)),'rows');
-[clusternum, y]=graphconncomp(sparse(A)); y = y';
+[clusternum, y]=graphconncomp(sparse(P)); y = y';
 if clusternum ~= c
-    sprintf('Can not find the correct cluster number: %d', c)
+    sprintf('The final cluster number is: %d. Can not find the correct cluster number: %d',clusternum, c)
 end;
 
 
