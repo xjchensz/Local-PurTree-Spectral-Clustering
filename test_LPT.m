@@ -6,7 +6,7 @@ clc;
 clear all;
 
 folder_now = pwd;
-addpath([folder_now,'\data']);
+addpath([folder_now,'\test']);
 
 level=5;
 

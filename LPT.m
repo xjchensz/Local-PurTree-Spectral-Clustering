@@ -96,6 +96,7 @@ for iter = 1:NITER
     if islocal
         dist=computeWeightDistance(W,Z);%local dist--weight distance
         distK_1=dist(:,k+1);
+        dist=dist(:,1:k);
     else
         distX=computeWeightDistance(W,D);%full dist--weight distance
     end
