@@ -5,10 +5,10 @@ function [  ] = draw_Dist( y, distX )
 
 %draw distX
 figure('name','Orignal distances'); 
-imshow(distX,[]); colormap jet; colorbar;
+imshow(distX,[]); colorbar;
 figure('name','Arranged distances learned by LPT'); 
 [~, idx]=sort(y,1);
-imshow(distX(idx,idx),[]); colormap jet; colorbar;
+imshow(distX(idx,idx),[]); colorbar;
 
 end
 
