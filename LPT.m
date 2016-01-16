@@ -1,4 +1,4 @@
-function [y, P, W, evs] = LPT(D, c, k, islocal, eta)
+function [y, P, W, evs] = LPT(D, c, k, eta, islocal)
 
 % D: level*num*num distance matrix, each sub matrix ia the level distance matrix
 % c: number of clusters
@@ -29,46 +29,52 @@ if k>num-2
 end;
 
 if nargin<4
-    islocal=1;
-end;
-
-if nargin<5
     eta=1;
 end;
 
-[~, idx] = sort(D(:,:,1),2);
-idx=idx(:,2:k+2);
-Z=zeros(num,k+1,level);
-for i = 1:num
-    Z(i,:,:)=D(i,idx(i,:),:);
-end
+if nargin<5
+    islocal=1;
+end;
 
 
 P = zeros(num,num);
 W = zeros(level,1);%weights
 W(:) = 1/level;
 rr = zeros(num,1);
-dist=computeWeightDistance(W,Z);%local dist--weight distance
-distK_1=dist(:,k+1);
-idx=idx(:,1:k);
-dist=dist(:,1:k);
-Z=Z(:,1:k,:);
-if islocal==0
-    distX=computeWeightDistance(W,D);%full dist--weight distance
+distX=computeWeightDistance(W,D);
+
+[~, idx] = sort(distX,2);
+if islocal
+    distK_1=distX(:,k+1);%local distance
+    idx=idx(:,2:k+1);
+    
+    for i = 1:num
+        id=idx(i,:);
+        di = distX(i,id);
+        rr(i) = 0.5*(k*distK_1(i,1)-sum(di));
+        P(i,id)=distK_1(i,1)-di;
+        y=sum(P(i,:));
+        if y==0
+            P(i,id)=1/k;
+        else
+            P(i,id)= P(i,id)/y;
+        end
+    end;
+else
+    for i = 1:num
+        di = distX(i,:);
+        rr(i) = 0.5*(k*distX(i,idx(num))-sum(di));
+        P(i,:)=distX(i,idx(num))-di;
+        y=sum(P(i,:));
+        if y==0
+           P(i,:)=1/k;
+        else
+           P(i,:)= P(i,:)/y;
+        end
+    end;
 end
 
-for i = 1:num
-    id=idx(i,:);
-    di = dist(i,:);
-    rr(i) = 0.5*(k*distK_1(i,1)-sum(di));
-    P(i,id)=distK_1(i,1)-di;
-    y=sum(P(i,:));
-    if y==0
-       P(i,id)=1/k;
-    else
-       P(i,id)= P(i,id)/y;
-    end
-end;
+
 
 r = mean(rr);
 lambda = mean(rr);
@@ -86,30 +92,38 @@ for iter = 1:NITER
     
 
     % compute weights
-    W=zeros(level,1);
-    for l=1:level
-        for i=1:num
-            W(l,1)= W(l,1)+sum(Z(i,:,l).*P(i,idx(i,:)));
+    W(:) = 0;
+    if islocal
+        for l=1:level
+          for i=1:num
+                W(l,1)= W(l,1)+sum(D(i,idx(i,:),l).*P(i,idx(i,:)));
+          end
+        end
+    else
+        for l=1:level
+          for i=1:num
+                W(l,1)= W(l,1)+sum(D(i,:,l).*P(i,:));
+          end
         end
     end
     W=expNorm(-W/eta);
    
     %update distance
+    distX=computeWeightDistance(W,D);%full dist--weight distance；
+    [~, idx] = sort(distX,2);
+    if islocal 
+        idx=idx(:,2:k+1);
+    end    
     
-    if islocal
-        dist=computeWeightDistance(W,Z);%local dist--weight distance
-    else
-        distX=computeWeightDistance(W,D);%full dist--weight distance
-    end
 
     % compute P
     distf = L2_distance_1(F',F');
     
+    P(:,:)=0;
     for i=1:num
         if islocal == 1
             id=idx(i,:);
-            dfi = distf(i,id);
-            E=(dist(i,:)+lambda*dfi)/(2*r);
+            E=(distX(i,id)+lambda*distf(i,id))/(2*r);
             E = mean(E)-E + 1/k;
             P(i,id) = positiveNorm(E);
         else
@@ -144,8 +158,3 @@ end;
 if clusternum ~= c
     sprintf('The final cluster number is: %d. Can not find the correct cluster number: %d',clusternum, c)
 end;
-
-
-
-
-%%
