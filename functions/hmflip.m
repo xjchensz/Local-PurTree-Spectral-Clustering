@@ -25,7 +25,7 @@ while (1)
     % Find zero to be removed from zero list..
     
     % Find zero before this.
-    m=find(A(r,:)==-l);
+    m= A(r,:)==-l;
     
     % Link past this zero.
     A(r,m)=A(r,l);
