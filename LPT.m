@@ -109,7 +109,7 @@ for iter = 1:NITER
     W=expNorm(-W/eta);
    
     %update distance
-    distX=computeWeightDistance(W,D);%full dist--weight distanceï¼›
+    distX=computeWeightDistance(W,D);%full dist--weight distance£»
     [~, idx] = sort(distX,2);
     if islocal 
         idx=idx(:,2:k+1);
@@ -157,4 +157,6 @@ end;
 [clusternum, y]=graphconncomp(sparse(P)); y = y';
 if clusternum ~= c
     sprintf('The final cluster number is: %d. Can not find the correct cluster number: %d',clusternum, c)
+else
+    sprintf('Succeed in uncovering %d clusters', c)
 end;

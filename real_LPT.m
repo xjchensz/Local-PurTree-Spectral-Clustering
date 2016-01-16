@@ -11,13 +11,13 @@ addpath([folder_now,'\real_data']);
 level=5;
 
 for i=1:level
-    num=csvread([ num2str(i) '_level_distance_.csv']);
+    num=csvread([ 'l' num2str(i) '.csv']);
     D(:,:,i)=num;
 end
 
 sprintf('The number of objects is: %d', size(D,1))
 
-[y, P, W, evs]=LPT(D,20,15,0,1);
+[y, P, W, evs]=LPT(D,10,50,500);
 y;
 W;
 
