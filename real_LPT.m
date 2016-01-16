@@ -11,7 +11,7 @@ addpath([folder_now,'\real_data']);
 level=5;
 
 for i=1:level
-    num=csvread([ 'l' num2str(i) '.csv']);
+    num=csvread([ num2str(i) '_level_distance_.csv']);
     D(:,:,i)=num;
 end
 
