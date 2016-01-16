@@ -20,7 +20,7 @@ end
 
 sprintf('The number of objects is: %d', size(D,1))
 
-[y, P, W, distX, evs]=LPT(D,60,50,500);
+[y, P, W, distX, evs]=LPT(D,60,50,0.8);
 
 draw_Dist(y,distX);
 draw_Weights(W);
