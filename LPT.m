@@ -1,4 +1,4 @@
-function [y, P, W, evs] = LPT(D, c, k, eta, islocal)
+function [y, P, W, distX, evs] = LPT(D, c, k, eta, islocal)
 
 % D: level*num*num distance matrix, each sub matrix ia the level distance matrix
 % c: number of clusters
