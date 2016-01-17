@@ -20,16 +20,16 @@ end
 sprintf('The number of objects is: %d', size(D,1))
 
 start=5;
-ed=40;
+ed=50;
 c=start:ed;
 k=50;
 eta=0.8;
-lw=zeros(ed-start+1);
+lw=zeros(1,ed-start+1);
 for i=1:length(c)
     [y, ~, ~, distX, ~]=LPT(D,c(i),k,eta);
     nc=length(unique(y));
-    if nc>=start & nc<=ed
-        lw(nc-start+1)=logWK(distX,y);
+    if nc>=start && nc<=ed
+        lw(1,nc-start+1)=logWK(distX,y);
     end
 end
 
