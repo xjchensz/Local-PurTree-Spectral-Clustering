@@ -33,6 +33,10 @@ for i=1:length(c)
     end
 end
 
+idx=find(lw>0);
+c=c(idx);
+lw=lw(idx);
+
 figure('name','Log(Wk)'); 
 plot(c,lw,'b-*')
 xlabel('no. of clusters')
