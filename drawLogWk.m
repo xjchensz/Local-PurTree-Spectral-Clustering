@@ -11,7 +11,7 @@ addpath([folder_now, '\functions']);
 addpath([folder_now, '\draw']);
 
 
-level=2;
+level=5;
 
 for i=1:level
     num=csvread([ 'l' num2str(i) '.csv']);
