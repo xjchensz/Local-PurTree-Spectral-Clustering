@@ -3,11 +3,11 @@
 %
 %%
 clc;
-%clear all;
+clear all;
 
 folder_now = pwd;
-path='\dis_5352';
-name='\dis_5352';
+path='\dis_1338';
+name='\dis_1338';
 addpath([folder_now,path]);
 
 level=4;

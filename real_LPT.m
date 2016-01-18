@@ -6,12 +6,12 @@ clc;
 %clear all;
 
 folder_now = pwd;
-path='\dis_5352';
+path='\dis_1338';
 addpath([folder_now,path]);
 addpath([folder_now, '\functions']);
 addpath([folder_now, '\draw']);
 
-load(['.',path,'\dis_5352.mat'],'D');
+load(['.',path,'\dis_1338.mat'],'D');
 level = size(D,3);
 sprintf('The number of objects is: %d', size(D,1));
 
