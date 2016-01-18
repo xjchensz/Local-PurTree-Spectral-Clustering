@@ -6,27 +6,26 @@ clc;
 %clear all;
 
 folder_now = pwd;
-addpath([folder_now,'\real_data']);
+path='\dis_5352';
+addpath([folder_now,path]);
 addpath([folder_now, '\functions']);
 addpath([folder_now, '\draw']);
 
-
-level=5;
-
-for i=1:level
-    num=csvread([ 'l' num2str(i) '.csv']);
-    D(:,:,i)=num;
-end
-sprintf('The number of objects is: %d', size(D,1))
+load(['.',path,'\dis_5352.mat'],'D');
+level = size(D,3);
+sprintf('The number of objects is: %d', size(D,1));
 
 start=5;
 ed=100;
 k=start:5:ed;
 c=20:5:50;
+lineType={'b-*','r-+','k-o','y-x','g-*','c-.','m-s'};
 eta=0.8;
 lw=zeros(length(c),length(k));
 nc=zeros(length(c),length(k));
+labelC=cell(length(c),1);
 for i=1:length(c)
+    labelC{i}=['c=',num2str(c(i))];
     for j=1:length(k)
         [y, ~, ~, distX, ~]=LPT(D,c(i),k(j),eta);
         lw(i,j)=logWK(distX,y);
@@ -34,16 +33,28 @@ for i=1:length(c)
     end
 end
 
-figure('name','No. of recovered clusters'); 
-plot(k,nc,'b-*')
-xlabel('No. of neighbors')
-ylabel('No. of clusters')
+figure('name','No. of recovered clusters');
+hold on;
+for i=1:length(c)
+   h=plot(k,nc(i,:),lineType{i}); 
+end
+hold off;
+xlabel('No. of neighbors');
+ylabel('No. of clusters');
+legend(labelC);
+saveas(h,['.',path,'\k_c.jpg']);
 
 figure('name','Log(Wk)'); 
-plot(k,lw,'b-*')
-xlabel('No. of neighbors')
-ylabel('Log(Wk)')
-
+hold on;
+for i=1:length(c)
+   h=plot(k,lw(i,:),lineType{i}); 
+end
+hold off;
+xlabel('No. of neighbors');
+ylabel('Log(Wk)');
+hl=legend(labelC,'Location','SouthEast');
+set(hl,'Box','off');
+saveas(h,['.',path,'\k_lw.jpg']);
 
 
 

@@ -6,19 +6,15 @@ clc;
 %clear all;
 
 folder_now = pwd;
-addpath([folder_now,'\real_data']);
+path='\dis_5352';
+addpath([folder_now,path]);
 addpath([folder_now, '\functions']);
 addpath([folder_now, '\draw']);
 
+load(['.',path,'\dis_5352.mat'],'D');
+level = size(D,3);
+sprintf('The number of objects is: %d', size(D,1));
 
-level=5;
-
-for i=1:level
-    num=csvread([ 'l' num2str(i) '.csv']);
-    D(:,:,i)=num;
-end
-
-sprintf('The number of objects is: %d', size(D,1))
 
 c=50;
 [y, P, W, distX, evs]=LPT(D,c,50,0.8);
