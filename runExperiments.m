@@ -19,10 +19,10 @@ level=size(D,3);
 sprintf('The number of objects is: %d', size(D,1))
 
 % nearest neighbors
-k=5:10:20;
+k=5:5:50;
 
 % number of clusters
-c=20:21;
+c=5:50;
 
 % eta
 eta=0.1:0.1:2;
