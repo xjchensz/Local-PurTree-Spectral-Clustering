@@ -1,9 +1,9 @@
 function [y, P, W, distX, evs] = LPT(D, c, k, eta, islocal)
 
-% D: level*num*num distance matrix, each sub matrix ia the level distance matrix
+% D: num*num*level distance matrix, each sub matrix ia the level distance matrix
 % c: number of clusters
 % k: number of neighbors to determine the initial graph, and the parameter r if r<=0
-% eta: reguralization coefficient
+% eta: regularization coefficient
 %
 % islocal:
 %           1: only update the similarities of the k neighbor pairs, faster
@@ -11,6 +11,8 @@ function [y, P, W, distX, evs] = LPT(D, c, k, eta, islocal)
 % y: num*1 cluster indicator vector
 % P: num*num learned symmetric similarity matrix
 % evs: eigenvalues of learned graph Laplacian in the iterations
+% W:weights
+%
 %
 %%
 

@@ -3,14 +3,14 @@
 %
 %%
 clc;
-clear all;
+%clear all;
 
 folder_now = pwd;
-path='\dis_1338';
-name='\dis_1338';
+path='\real_data';
+name='\real_data';
 addpath([folder_now,path]);
 
-level=4;
+level=5;
 
 for i=1:level
     num=csvread([ 'l' num2str(i) '.csv']);
