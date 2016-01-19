@@ -28,7 +28,7 @@ c=5:50;
 eta=0.1:0.1:2;
 numEta=[2,4,6];
 
-index=2;
+index=1;
 if index>=0
     start=0;
     for i=1:index-1
@@ -45,7 +45,11 @@ wm=zeros(length(eta),length(k),length(c),level);
 for i=1:length(c)
     for j=1:length(k)
         for l=1:length(eta)
-            [y, ~, W, distX, ~]=LPT(D,c(i),k(j),eta(l));
+            try
+                [y, ~, W, distX, ~]=LPT(D,c(i),k(j),eta(l));
+            catch
+                continue;
+            end
             nc=length(unique(y));
             ncm(l,j,i)=nc;
             wm(l,j,i,:)=W;
