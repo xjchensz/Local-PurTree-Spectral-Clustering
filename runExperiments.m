@@ -13,7 +13,7 @@ addpath([folder_now, '\functions']);
 addpath([folder_now, '\draw']);
 
 
-load(['.',path,name,'.mat'],'D');
+load([folder_now,path,name,'.mat'],'D');
 
 level=size(D,3);
 sprintf('The number of objects is: %d', size(D,1))
@@ -57,7 +57,7 @@ end
 
 
 if index>=0
-    path=['.', path, '\parts'];
+    path=[pwd, path, '\parts'];
     if ~exist(path,'dir')
         mkdir path;
     end
