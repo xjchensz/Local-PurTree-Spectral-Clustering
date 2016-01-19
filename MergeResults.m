@@ -9,7 +9,7 @@ clc;
 clear all;
 
 folder_now = pwd;
-path='\real_data';
+path='\dis_1338';
 subpath=[path,'\parts'];
 addpath([folder_now, path]);
 

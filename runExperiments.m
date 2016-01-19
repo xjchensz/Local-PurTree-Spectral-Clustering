@@ -6,8 +6,8 @@ clc;
 clear all;
 
 folder_now = pwd;
-path='\real_data';
-name='\real_data';
+path='\dis_1338';
+name='\dis_1338';
 addpath([folder_now, path]);
 addpath([folder_now, '\functions']);
 addpath([folder_now, '\draw']);
@@ -26,9 +26,9 @@ c=20:21;
 
 % eta
 eta=0.1:0.1:2;
-numEta=[2,8,10];
+numEta=[2,4,6];
 
-index=3;
+index=2;
 if index>=0
     start=0;
     for i=1:index-1

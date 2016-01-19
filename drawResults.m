@@ -6,7 +6,7 @@ clc;
 %clear all;
 
 folder_now = pwd;
-path='\real_data';
+path='\dis_1338';
 addpath([folder_now, path]);
 addpath([folder_now, '\functions']);
 addpath([folder_now, '\draw']);
