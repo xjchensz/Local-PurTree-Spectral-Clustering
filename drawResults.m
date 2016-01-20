@@ -50,14 +50,16 @@ saveas(h,['.',path,'\eta_weights.jpg']);
 h=figure('name','No. of clusters');
 
 for i=1:length(eta)
-    subplot(i,1,i);
+    
     surf(repmat(k',[1,length(c)]),repmat(c,[length(k),1]),reshape(ncm(i,:,:),[length(k),length(c)]));
+ 
+    
     xlabel('No. of nearest neighbors');
     ylabel('Expected no. of clusters');
     zlabel('No. of clusters');
 end
 
-saveas(h,['.',path,'\eta_weights.jpg']);
+saveas(h,['.',path,'\k_c.jpg']);
 
 %draw c-logWk
 
@@ -66,6 +68,8 @@ labelC=cell(length(eta),1);
 
 nc=unique(ncm);
 [nc,~]=sort(nc);
+[~,~,ncv]=find(nc);
+nc=ncv;
 mlw=zeros(length(eta),length(nc));
 for i=1:length(eta)
     for j=1:length(nc)
@@ -78,6 +82,7 @@ end
 figure('name','logWk');
 hold on;
 labelC=cell(length(eta),1);
+
 for i=1:length(eta)
     index=mod(i,length(lineType));
     if index==0
