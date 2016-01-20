@@ -113,7 +113,7 @@ end
 nc=unique(ncm);
 [nc,~]=sort(nc);
 [~,~,ncv]=find(nc);
-nc=ncv;
+nc=ncv(ncv<=max(c));
 mlw=zeros(length(eta),length(nc));
 for i=1:length(eta)
     for j=1:length(nc)
@@ -122,24 +122,21 @@ for i=1:length(eta)
     end
 end
 
-
 figure('name','logWk');
 hold on;
 
 
-labelEta=cell(length(eta),1);
 for i=1:length(eta)
     index=mod(i,length(lineType));
     if index==0
         index=length(lineType);
     end
     h=plot(nc,mlw(i,:),lineType{index});
-    labelEta{i}=['\eta=',num2str(eta(i))];
 end
 hold off;
 xlabel('No. of clusters');
 ylabel('Log(Wk)');
-hleg = legend(labelEta,'Location', 'EastOutside');
+% hleg = legend(labelEta,'Location', 'EastOutside');
 
 saveas(h,['.',path,'\logWk.jpg']);
 
