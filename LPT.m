@@ -22,7 +22,7 @@ level=size(D,3); %levels
 num = size(D,2);%no. of objects
 
 if nargin<3 || k<=0
-    k=15;
+    k=20;
 end;
 
 if k>num-2
@@ -65,14 +65,15 @@ if islocal
 else
     for i = 1:num
         di = distX(i,:);
-        rr(i) = 0.5*(k*distX(i,idx(num))-sum(di));
-        P(i,:)=distX(i,idx(num))-di;
-        y=sum(P(i,:));
+        rr(i) = 0.5*(num*distX(i,idx(i,num))-sum(di));
+        P(i,:)=distX(i,idx(i,num))-di;
+        y=sum(P(i,:))-di(i);
         if y==0
-           P(i,:)=1/k;
+            P(i,:)=1/num;
         else
-           P(i,:)= P(i,:)/y;
+            P(i,:)= P(i,:)/y;
         end
+        P(i,i)=0;
     end;
 end
 
@@ -92,32 +93,31 @@ L0 = D0 - P0;
 
 for iter = 1:NITER
     
-
     % compute weights
     W(:) = 0;
     if islocal
         for l=1:level
-          for i=1:num
+            for i=1:num
                 W(l,1)= W(l,1)+sum(D(i,idx(i,:),l).*P(i,idx(i,:)));
-          end
+            end
         end
     else
         for l=1:level
-          for i=1:num
+            for i=1:num
                 W(l,1)= W(l,1)+sum(D(i,:,l).*P(i,:));
-          end
+            end
         end
     end
     W=expNorm(-W/eta);
-   
-    %update distance
-    distX=computeWeightDistance(W,D);%full dist--weight distance£»
-    [~, idx] = sort(distX,2);
-    if islocal 
-        idx=idx(:,2:k+1);
-    end    
     
-
+    %update distance
+    distX=computeWeightDistance(W,D);%full dist--weight distanceï¼›
+    [~, idx] = sort(distX,2);
+    if islocal
+        idx=idx(:,2:k+1);
+    end
+    
+    
     % compute P
     distf = L2_distance_1(F',F');
     
@@ -129,8 +129,10 @@ for iter = 1:NITER
             E = mean(E)-E + 1/k;
             P(i,id) = positiveNorm(E);
         else
-            E=-(distX(i,:)+lambda*distf(i,:))/(2*r);
+            E=(distX(i,:)+lambda*distf(i,:))/(2*r);
+            E(i)=0;
             E = mean(E)-E + 1/num;
+            E(i)=0;
             P(i,:) = positiveNorm(E);
         end;
     end;
@@ -145,18 +147,22 @@ for iter = 1:NITER
     
     fn1 = sum(ev(1:c));
     fn2 = sum(ev(1:c+1));
-    if fn1 > 0.00000000001
+    if fn1 > 1e-11
+        % more clusters than expected
         lambda = 2*lambda;
-    elseif fn2 < 0.00000000001
-        lambda = lambda/2;  F = F_old;
+    elseif fn2 < 1e-11
+        lambda = lambda/2;
+        F = F_old;
     else
         break;
     end;
-    
 end;
 
+
+
 %[labv, tem, y] = unique(round(0.1*round(1000*F)),'rows');
-[clusternum, y]=graphconncomp(sparse(P)); y = y';
+[clusternum, y]=graphconncomp(sparse(P));
+y = y';
 if clusternum ~= c
     sprintf('The final cluster number is: %d. Can not find the correct cluster number: %d',clusternum, c)
 else
