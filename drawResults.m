@@ -1,6 +1,3 @@
-%test computeLogWk
-%input 5 csv files
-%
 %%
 clc;
 %clear all;
@@ -33,38 +30,85 @@ lineType={'b-*','r-+','k-o','y-x','g-*','c-.','m-s'};
 %draw eta-weights
 figure('name','Wegiths');
 hold on;
-labelC=cell(level,1);
+labelW=cell(level,1);
 
 mwm=mean(mean(wm,2),3);
 for i=1:level
     h=plot(eta,mwm(:,1,1,i),lineType{i});
-    labelC{i}=['w',num2str(i)];
+    labelW{i}=['w',num2str(i)];
 end
 hold off;
 xlabel('\eta');
 ylabel('Weights');
-legend(labelC);
+legend(labelW);
 saveas(h,['.',path,'\eta_weights.jpg']);
 
-%draw k-c
+%draw detailed k-c
 h=figure('name','No. of clusters');
-
-for i=1:length(eta)
-    
-    surf(repmat(k',[1,length(c)]),repmat(c,[length(k),1]),reshape(ncm(i,:,:),[length(k),length(c)]));
- 
-    
-    xlabel('No. of nearest neighbors');
-    ylabel('Expected no. of clusters');
-    zlabel('No. of clusters');
+hold on;
+labelC=cell(length(c),1);
+for j=1:length(c)
+    labelC{j}=['c=',num2str(c(j))];
 end
 
-saveas(h,['.',path,'\k_c.jpg']);
+
+dncm=permute(repmat(repmat(c',[1,length(k)]),[1,1,length(eta)]),[3,2,1]);
+dncm=ncm-dncm;
+
+ymin=min(min(min(dncm)));
+ymax=max(max(max(dncm)));
+
+for i=1:length(eta)
+    %surf(repmat(k',[1,length(c)]),repmat(c,[length(k),1]),reshape(ncm(i,:,:),[length(k),length(c)]));
+    index=mod(i,length(lineType));
+    if ~index
+        index=length(lineType);
+    end
+    subplot(4,5,i);
+    %surf(repmat(k',[1,length(c)]),repmat(c,[length(k),1]),reshape(ncm(i,:,:),[length(k),length(c)]));
+    index=mod(i,length(lineType));
+    if ~index
+        index=length(lineType);
+    end
+    h=plot(k,reshape(dncm(i,:,:),[size(dncm,2),size(dncm,3)]),lineType{index});
+    xlabel('No. of nearest neighbors');
+    ylabel('Difference no. of clusters');
+    zlabel('No. of clusters');
+    axis([c(1) c(length(c)) ymin-10 ymax+10])
+    %legend(labelC);
+end
+
+
+hold off;
+try
+    saveas(h,['.',path,'\k_c_detail.jpg']);
+catch
+end
+
+%draw mean k-c
+
+h=figure('name','No. of clusters');
+hold on;
+
+mdncm=reshape(mean(dncm,1),[length(k),length(c)]);
+
+ymin=min(min(min(mdncm)));
+ymax=max(max(max(mdncm)));
+
+h=plot(k,mdncm,lineType{1});
+xlabel('No. of nearest neighbors');
+ylabel('Difference no. of clusters');
+zlabel('No. of clusters');
+axis([c(1) c(length(c)) ymin-10 ymax+10])
+
+hold off;
+try
+    saveas(h,['.',path,'\k_c_mean.jpg']);
+catch
+end
 
 %draw c-logWk
 
-
-labelC=cell(length(eta),1);
 
 nc=unique(ncm);
 [nc,~]=sort(nc);
@@ -81,23 +125,22 @@ end
 
 figure('name','logWk');
 hold on;
-labelC=cell(length(eta),1);
 
+
+labelEta=cell(length(eta),1);
 for i=1:length(eta)
     index=mod(i,length(lineType));
     if index==0
         index=length(lineType);
     end
     h=plot(nc,mlw(i,:),lineType{index});
-    labelC{i}=['\eta=',num2str(eta(i))];
+    labelEta{i}=['\eta=',num2str(eta(i))];
 end
 hold off;
 xlabel('No. of clusters');
 ylabel('Log(Wk)');
-legend(labelC);
+hleg = legend(labelEta,'Location', 'EastOutside');
+
 saveas(h,['.',path,'\logWk.jpg']);
-
-
-
 
 %%
