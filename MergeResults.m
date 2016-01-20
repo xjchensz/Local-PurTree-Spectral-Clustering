@@ -21,7 +21,7 @@ lw1=lw;
 ncm1=ncm;
 wm1=wm;
 
-ed=3;
+ed=4;
 for i=2:ed
     load(['.',subpath,['\lw', num2str(i), '.mat']],'lw');
     load(['.',subpath,['\ncm',num2str(i),'.mat']],'ncm');
@@ -38,3 +38,5 @@ wm=wm1;
 save(['.',path,'\lw.mat'],'lw');
 save(['.',path,'\ncm.mat'],'ncm');
 save(['.',path,'\wm.mat'],'wm');
+
+%%
