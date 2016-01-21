@@ -32,16 +32,18 @@ index=4;
 if index>=0
     start=0;
     for i=1:index-1
-        
         start=start+numEta(i);
     end
     eta=eta(start+1:start+numEta(index));
 end
 
+num=size(D,1);
 
 lw=zeros(length(eta),length(k),length(c));
 ncm=zeros(length(eta),length(k),length(c));
 wm=zeros(length(eta),length(k),length(c),level);
+dist=zeros(length(eta),length(k),length(c),num,num);
+Y=zeros(length(eta),length(k),length(c),num);
 
 for i=1:length(c)
     for j=1:length(k)
@@ -55,6 +57,8 @@ for i=1:length(c)
             ncm(l,j,i)=nc;
             wm(l,j,i,:)=W;
             lw(l,j,i)=logWK(distX,y);
+            dist(l,j,i)=distX;
+            Y(l,j,i)=y;
         end
     end
 end
@@ -69,11 +73,15 @@ if index>=0
     save([path '\lw',num2str(index),'.mat'],'lw');
     save([path '\ncm',num2str(index),'.mat'],'ncm');
     save([path '\wm',num2str(index),'.mat'],'wm');
+    save([path '\dist',num2str(index),'.mat'],'dist');
+    save([path '\Y',num2str(index),'.mat'],'Y');
 else
     path=['.', path];
     save([path '\lw.mat'],'lw');
     save([path '\ncm.mat'],'ncm');
     save([path '\wm.mat'],'wm');
+    save([path '\dist.mat'],'dist');
+    save([path '\Y.mat'],'Y');
 end
 
 %%
