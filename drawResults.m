@@ -11,6 +11,7 @@ addpath([folder_now, '\draw']);
 load(['.',path,'\lw.mat'],'lw');
 load(['.',path,'\ncm.mat'],'ncm');
 load(['.',path,'\wm.mat'],'wm');
+load(['.',path,'\lw_wm.mat'],'lw_wm');
 
 level = size(wm,4);
 
@@ -139,5 +140,39 @@ ylabel('Log(Wk)');
 % hleg = legend(labelEta,'Location', 'EastOutside');
 
 saveas(h,['.',path,'\logWk.jpg']);
+
+%draw lw_wm
+
+
+nc=unique(ncm);
+[nc,~]=sort(nc);
+[~,~,ncv]=find(nc);
+nc=ncv(ncv<=max(c));
+mlw=zeros(length(eta),length(nc));
+for i=1:length(eta)
+    for j=1:length(nc)
+        id=find(ncm==nc(j));
+        mlw(i,j)=sum(lw(id))/length(id);
+    end
+end
+
+figure('name','lw_wm');
+hold on;
+
+
+for i=1:length(eta)
+    index=mod(i,length(lineType));
+    if index==0
+        index=length(lineType);
+    end
+    h=plot(nc,mlw(i,:),lineType{index});
+end
+hold off;
+xlabel('No. of clusters');
+ylabel('Log(Wk)');
+% hleg = legend(labelEta,'Location', 'EastOutside');
+
+saveas(h,['.',path,'\logWk.jpg']);
+
 
 %%
