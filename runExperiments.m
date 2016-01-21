@@ -26,9 +26,9 @@ c=5:50;
 
 % eta
 eta=0.1:0.1:2;
-numEta=[2,4,6,8];
+numEta=[7,6,7];
 
-index=4;
+index=1;
 if index>=0
     start=0;
     for i=1:index-1
