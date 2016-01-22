@@ -1,4 +1,4 @@
-function [ Q ] = Q( distX, y )
+function [ Q ] = computeQ( distX, y )
 %LOGWK Summary of this function goes here
 %   Detailed explanation goes here
 cluster=unique(y);
