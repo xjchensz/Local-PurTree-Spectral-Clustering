@@ -28,7 +28,7 @@ c=5:50;
 eta=0.1:0.1:2;
 numEta=[5,5,5,5];
 
-index=1;
+index=2;
 if index>=0
     start=0;
     for i=1:index-1
