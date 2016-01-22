@@ -27,14 +27,18 @@ eta=0.1:0.1:2;
 level = size(wm,4);
 
 W=zeros(size(wm,1),1);
+rw
 
 for i=1:size(wm,1)
-    
-    W(i) = wm(i,1,1,1);
-    
+    for j=1:size(wm,2)
+        for l=1:size(wm,2)
+            distX=computeWeightDistance(W,D);
+            
+        end
+    end
 end
 
-distX=computeWeightDistance(W,D);
+
 num = size(D,2);%no. of objects
 lw_wm=2*exp(lw)*num/sum(sum(distX));
 
