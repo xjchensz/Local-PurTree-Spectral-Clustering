@@ -3,7 +3,7 @@
 %
 %%
 clc;
-%clear all;
+clear all;
 
 folder_now = pwd;
 addpath([folder_now,'\real_data']);

@@ -3,10 +3,12 @@
 %
 %%
 clc;
-%clear all;
+clear all;
 
 folder_now = pwd;
 addpath([folder_now,'\test']);
+addpath([folder_now, '\functions']);
+addpath([folder_now, '\draw']);
 
 level=5;
 
@@ -15,9 +17,10 @@ for i=1:level
     D(:,:,i)=num;
 end
 
-[y, P, W, evs]=LPT(D,2,15,1);
-y;
-W;
+[y, P, W, distX, evs]=LPT(D,2,2,0.8);
+q=computeQ(distX,y);
+sprintf('lq: %d', q);
+
 
 
 %%

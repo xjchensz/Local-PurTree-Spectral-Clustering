@@ -42,6 +42,7 @@ num=size(D,1);
 lw=zeros(length(eta),length(k),length(c));
 ncm=zeros(length(eta),length(k),length(c));
 wm=zeros(length(eta),length(k),length(c),level);
+Q=zeros(length(eta),length(k),length(c));
 
 for i=1:length(c)
     for j=1:length(k)
@@ -55,6 +56,7 @@ for i=1:length(c)
             ncm(l,j,i)=nc;
             wm(l,j,i,:)=W;
             lw(l,j,i)=logWK(distX,y);
+            Q(l,j,i)=computeQ(distX,y);
         end
     end
 end
@@ -69,11 +71,13 @@ if index>=0
     save([path '\lw',num2str(index),'.mat'],'lw');
     save([path '\ncm',num2str(index),'.mat'],'ncm');
     save([path '\wm',num2str(index),'.mat'],'wm');
+    save([path '\Q',num2str(index),'.mat'],'Q');
 else
     path=['.', path];
     save([path '\lw.mat'],'lw');
     save([path '\ncm.mat'],'ncm');
     save([path '\wm.mat'],'wm');
+    save([path '\Q.mat'],'Q');
 end
 
 
