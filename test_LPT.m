@@ -19,7 +19,7 @@ end
 
 [y, P, W, distX, evs]=LPT(D,2,2,0.8);
 q=computeQ(distX,y);
-sprintf('lq: %d', q);
+sprintf('lq: %f', q);
 
 
 
