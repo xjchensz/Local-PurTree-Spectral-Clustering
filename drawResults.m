@@ -43,6 +43,7 @@ xlabel('\eta');
 ylabel('Weights');
 legend(labelW);
 saveas(h,['.',path,'\eta_weights.jpg']);
+saveas(h,['.',path,'\eta_weights.eps']);
 
 %draw detailed k-c
 h=figure('name','No. of clusters');
@@ -83,6 +84,7 @@ end
 hold off;
 try
     saveas(h,['.',path,'\k_c_detail.jpg']);
+    saveas(h,['.',path,'\k_c_detail.eps']);
 catch
 end
 
@@ -105,6 +107,7 @@ axis([c(1) c(length(c)) ymin-10 ymax+10])
 hold off;
 try
     saveas(h,['.',path,'\k_c_mean.jpg']);
+    saveas(h,['.',path,'\k_c_mean.eps']);
 catch
 end
 
@@ -140,14 +143,14 @@ ylabel('Log(Wk)');
 % hleg = legend(labelEta,'Location', 'EastOutside');
 
 saveas(h,['.',path,'\logWk.jpg']);
+saveas(h,['.',path,'\logWk.eps']);
 
 %draw c_Q
-
 
 nc=unique(ncm);
 [nc,~]=sort(nc);
 [~,~,ncv]=find(nc);
-nc=ncv;
+nc=ncv(ncv<=300);
 %nc=ncv(ncv<=max(c));
 
 
@@ -180,7 +183,7 @@ hold off;
 xlabel('No. of clusters');
 ylabel('Moduality');
 saveas(h,['.',path,'\Q_detail.jpg']);
-
+saveas(h,['.',path,'\Q_detail.eps']);
 
 
 h=figure('name','Q_eta');
@@ -205,7 +208,7 @@ xlabel('\eta');
 ylabel('No. of clusters');
 legend (labelEta, 'Location', 'EastOutside');
 saveas(h,['.',path,'\Q_eta.jpg']);
-
+saveas(h,['.',path,'\Q_eta.eps']);
 
 
 h=figure('name','Q_mean');
@@ -229,6 +232,7 @@ ylabel('Moduality');
 % hleg = legend(labelEta,'Location', 'EastOutside');
 
 saveas(h,['.',path,'\Q_mean.jpg']);
+saveas(h,['.',path,'\Q_mean.eps']);
 
 
 h=figure('name','Q_max');
@@ -250,6 +254,7 @@ xlabel('No. of clusters');
 ylabel('Moduality');
 % hleg = legend(labelEta,'Location', 'EastOutside');
 
+saveas(h,['.',path,'\Q_max.eps']);
 saveas(h,['.',path,'\Q_max.jpg']);
 
 

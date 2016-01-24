@@ -18,7 +18,7 @@ gamma=Q(1:size(Q,1),1);
 Q=Q(:,2:size(Q,2));
 
 
-lineType={'b-*','r-+','k-o','y-x','g-*','c-.','m-s'};
+lineType={'b-o','r-o','k-o','y-o','g-o','c-o','m-o'};
 
 
 %draw c_Q
@@ -46,7 +46,7 @@ end
 
 
 hold off;
-saveas(h,[path,'\Q_gamma_ptc.jpg']);
+saveas(h,[path,'\Q_gamma_ptc.eps']);
 
 
 
@@ -64,7 +64,7 @@ h=plot(c,meanQ,lineType{1});
 hold off;
 xlabel('No. of clusters');
 ylabel('Moduality');
-saveas(h,[path,'\Q_mean.jpg']);
+saveas(h,[path,'\Q_mean.eps']);
 
 
 
@@ -84,7 +84,7 @@ xlabel('No. of clusters');
 ylabel('Moduality');
 % hleg = legend(labelEta,'Location', 'EastOutside');
 
-saveas(h,[path,'\Q_max.jpg']);
+saveas(h,[path,'\Q_max.eps']);
 
 
 %%
