@@ -11,7 +11,7 @@ addpath([folder_now, '\draw']);
 load(['.',path,'\lw.mat'],'lw');
 load(['.',path,'\ncm.mat'],'ncm');
 load(['.',path,'\wm.mat'],'wm');
-load(['.',path,'\lw_wm.mat'],'lw_wm');
+load(['.',path,'\Q.mat'],'Q');
 
 level = size(wm,4);
 
@@ -88,7 +88,7 @@ end
 
 %draw mean k-c
 
-h=figure('name','No. of clusters');
+figure('name','No. of clusters');
 hold on;
 
 mdncm=reshape(mean(dncm,1),[length(k),length(c)]);
@@ -110,16 +110,16 @@ end
 
 %draw c-logWk
 
-
 nc=unique(ncm);
 [nc,~]=sort(nc);
 [~,~,ncv]=find(nc);
-nc=ncv(ncv<=max(c));
+nc=ncv;
+%nc=ncv(ncv<=max(c));
 mlw=zeros(length(eta),length(nc));
 for i=1:length(eta)
     for j=1:length(nc)
-        id=find(ncm==nc(j));
-        mlw(i,j)=sum(lw(id))/length(id);
+        id=find(ncm(i,:,:)==nc(j));
+        mlw(i,j)=sum(lw(i,id))/length(id);
     end
 end
 
@@ -141,38 +141,116 @@ ylabel('Log(Wk)');
 
 saveas(h,['.',path,'\logWk.jpg']);
 
-%draw lw_wm
+%draw c_Q
 
 
 nc=unique(ncm);
 [nc,~]=sort(nc);
 [~,~,ncv]=find(nc);
-nc=ncv(ncv<=max(c));
-mlw=zeros(length(eta),length(nc));
+nc=ncv;
+%nc=ncv(ncv<=max(c));
+
+
+h=figure('name','Q_detail');
+hold on;
+dQ=zeros(length(nc),1);
+labelEta=cell(length(eta),1);
 for i=1:length(eta)
-    for j=1:length(nc)
-        id=find(ncm==nc(j));
-        mlw(i,j)=sum(lw(id))/length(id);
+    index=mod(i,length(lineType));
+    if ~index
+        index=length(lineType);
     end
+    subplot(4,5,i);
+    index=mod(i,length(lineType));
+    if ~index
+        index=length(lineType);
+    end
+    dQ(:,1)=NaN;
+    for j=1:length(nc)
+        id=find(ncm(i,:,:)==nc(j));
+        dQ(j,1)=sum(Q(i,id))/length(id);
+    end
+    plot(nc,dQ(:,1),lineType{index});
+    xlabel('No. of clusters');
+    ylabel('Moduality');
 end
 
-figure('name','lw_wm');
+
+hold off;
+xlabel('No. of clusters');
+ylabel('Moduality');
+saveas(h,['.',path,'\Q_detail.jpg']);
+
+
+
+h=figure('name','Q_eta');
+sQ=zeros(length(eta),length(nc));
 hold on;
-
-
 for i=1:length(eta)
+    
+    sQ(i,:)=NaN;
+    for j=1:length(nc)
+        id=find(ncm(i,:,:)==nc(j));
+        if ~isempty(id)
+            sQ(i,j)=max(max(Q(i,id)));
+        end
+    end
+    id=~isnan(sQ(i,:));
+    labelEta{i}=['\eta=',num2str(eta(i))];
+    plot(nc(id),sQ(i,id),'k-o','color',rand(1,3));
+end
+
+hold off;
+xlabel('\eta');
+ylabel('No. of clusters');
+legend (labelEta, 'Location', 'EastOutside');
+saveas(h,['.',path,'\Q_eta.jpg']);
+
+
+
+h=figure('name','Q_mean');
+hold on;
+mQ=zeros(length(eta),length(nc));
+for i=1:length(eta)
+    for j=1:length(nc)
+        id=find(ncm(i,:,:)==nc(j));
+        mQ(i,j)=sum(Q(i,id))/length(id);
+    end
     index=mod(i,length(lineType));
     if index==0
         index=length(lineType);
     end
-    h=plot(nc,mlw(i,:),lineType{index});
+    plot(nc,mQ(i,:),lineType{index});
 end
+
 hold off;
 xlabel('No. of clusters');
-ylabel('Log(Wk)');
+ylabel('Moduality');
 % hleg = legend(labelEta,'Location', 'EastOutside');
 
-saveas(h,['.',path,'\logWk.jpg']);
+saveas(h,['.',path,'\Q_mean.jpg']);
+
+
+h=figure('name','Q_max');
+hold on;
+maxQ=zeros(length(nc),1);
+maxQ=NaN;
+for j=1:length(nc)
+    id=find(ncm==nc(j));
+    if ~isempty(id)
+        maxQ(j,1)=max(Q(id));
+    end
+end
+id=~isnan(maxQ);
+plot(nc(id),maxQ(id),lineType{1});
+
+
+hold off;
+xlabel('No. of clusters');
+ylabel('Moduality');
+% hleg = legend(labelEta,'Location', 'EastOutside');
+
+saveas(h,['.',path,'\Q_max.jpg']);
 
 
 %%
