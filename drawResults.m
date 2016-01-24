@@ -46,7 +46,7 @@ saveas(h,['.',path,'\eta_weights.jpg']);
 saveas(h,['.',path,'\eta_weights.eps']);
 
 %draw detailed k-c
-h=figure('name','No. of clusters');
+h=figure('name','k_c_detail');
 hold on;
 labelC=cell(length(c),1);
 for j=1:length(c)
@@ -90,7 +90,7 @@ end
 
 %draw mean k-c
 
-figure('name','No. of clusters');
+h=figure('name','k_c_mean');
 hold on;
 
 mdncm=reshape(mean(dncm,1),[length(k),length(c)]);
@@ -98,7 +98,7 @@ mdncm=reshape(mean(dncm,1),[length(k),length(c)]);
 ymin=min(min(min(mdncm)));
 ymax=max(max(max(mdncm)));
 
-h=plot(k,mdncm,lineType{1});
+plot(k,mdncm,lineType{1});
 xlabel('No. of nearest neighbors');
 ylabel('Difference no. of clusters');
 zlabel('No. of clusters');
@@ -110,6 +110,7 @@ try
     saveas(h,['.',path,'\k_c_mean.eps']);
 catch
 end
+
 
 %draw c-logWk
 
@@ -144,6 +145,62 @@ ylabel('Log(Wk)');
 
 saveas(h,['.',path,'\logWk.jpg']);
 saveas(h,['.',path,'\logWk.eps']);
+
+
+%draw k-Q
+
+
+figure('name','k_Q');
+hold on;
+
+ymin=min(min(min(mdncm)));
+ymax=max(max(max(mdncm)));
+
+h=plot(k,mean(mean(Q,3),1),lineType{1});
+xlabel('No. of nearest neighbors');
+ylabel('Moduality');
+
+hold off;
+try
+    saveas(h,['.',path,'\k_Q.jpg']);
+    saveas(h,['.',path,'\k_Q.eps']);
+catch
+end
+
+
+h=figure('name','Q_eta');
+sQ=zeros(length(eta),length(nc));
+hold on;
+for j=1:length(nc)
+    sQ(:,j)=NaN;
+    for i=1:length(eta)
+        id=find(ncm(i,:,:)==nc(j));
+        if ~isempty(id)
+            sQ(i,j)=mean(Q(i,id));
+        end
+    end
+    plot(eta,sQ(:,j),'k-o','color',rand(1,3));
+end
+
+hold off;
+xlabel('\eta');
+ylabel('Q');
+legend (labelC, 'Location', 'EastOutside');
+saveas(h,['.',path,'\Q_eta.jpg']);
+saveas(h,['.',path,'\Q_eta.eps']);
+
+
+h=figure('name','Q_mean_eta');
+hold on;
+
+sQ=mean(mean(Q,3),2);
+plot(eta,sQ,lineType{1});
+
+hold off;
+xlabel('\eta');
+ylabel('Q');
+saveas(h,['.',path,'\Q_mean_eta.jpg']);
+saveas(h,['.',path,'\Q_mean_eta.eps']);
 
 %draw c_Q
 
@@ -247,6 +304,7 @@ for j=1:length(nc)
 end
 id=~isnan(maxQ);
 plot(nc(id),maxQ(id),lineType{1});
+axis([ -inf inf 0 0.3])
 
 
 hold off;
@@ -254,8 +312,8 @@ xlabel('No. of clusters');
 ylabel('Moduality');
 % hleg = legend(labelEta,'Location', 'EastOutside');
 
-saveas(h,['.',path,'\Q_max.eps']);
-saveas(h,['.',path,'\Q_max.jpg']);
+saveas(h,['.',path,'\Q_max_lpt.eps']);
+saveas(h,['.',path,'\Q_max_lpt.jpg']);
 
 
 %%

@@ -27,28 +27,49 @@ lineType={'b-o','r-o','k-o','y-o','g-o','c-o','m-o'};
 h=figure('name','Q_gamma_ptc');
 hold on;
 labelGamma=cell(length(gamma),1);
+gammaAxis=gamma;
 for i=1:length(gamma)
     index=mod(i,length(lineType));
     if ~index
         index=length(lineType);
     end
-    subplot(2,3,i);
-    index=mod(i,length(lineType));
-    if ~index
-        index=length(lineType);
-    end
     labelGamma{i}=['\gamma=',num2str(gamma(i))];
-    plot(c,Q(i,:),lineType{index});
-    xlabel('No. of clusters');
-    ylabel('Moduality');
-    title(['\gamma=',num2str(gamma(i))]);
+    gammaAxis(i)=i;
 end
 
+plot(gammaAxis,Q,lineType{1});
+xlabel('\gamma');
+ylabel('Moduality');
+title('Q-\gamma');
+set(gca,'XTick',gammaAxis);
+set(gca,'XTickLabel',gamma);
 
 hold off;
 saveas(h,[path,'\Q_gamma_ptc.eps']);
 
 
+h=figure('name','Q_gamma_mean_ptc');
+hold on;
+labelGamma=cell(length(gamma),1);
+gammaAxis=gamma;
+for i=1:length(gamma)
+    index=mod(i,length(lineType));
+    if ~index
+        index=length(lineType);
+    end
+    labelGamma{i}=['\gamma=',num2str(gamma(i))];
+    gammaAxis(i)=i;
+end
+
+plot(gammaAxis,mean(Q,2),lineType{1});
+xlabel('\gamma');
+ylabel('Moduality');
+title('Q-\gamma');
+set(gca,'XTick',gammaAxis);
+set(gca,'XTickLabel',gamma);
+
+hold off;
+saveas(h,[path,'\Q_gamma_mean_ptc.eps']);
 
 
 figure('name','Q_mean');
@@ -77,14 +98,14 @@ for j=1:length(c)
     maxQ(j,1)=max(Q(:,j));
 end
 h=plot(c,maxQ,lineType{1});
-
+axis([ -inf inf 0 0.3])
 
 hold off;
 xlabel('No. of clusters');
 ylabel('Moduality');
 % hleg = legend(labelEta,'Location', 'EastOutside');
 
-saveas(h,[path,'\Q_max.eps']);
+saveas(h,[path,'\Q_max_ptc.eps']);
 
 
 %%
