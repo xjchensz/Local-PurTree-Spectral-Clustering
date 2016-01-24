@@ -98,7 +98,7 @@ for j=1:length(c)
     maxQ(j,1)=max(Q(:,j));
 end
 h=plot(c,maxQ,lineType{1});
-axis([ -inf inf 0 0.3])
+axis([ -inf inf 0 0.25])
 
 hold off;
 xlabel('No. of clusters');
