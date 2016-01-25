@@ -168,6 +168,29 @@ catch
 end
 
 
+%draw k-Q_detali
+h=figure('name','k_Q_detail');
+hold on;
+
+value=zeros(numel(Q),1);
+group=zeros(numel(Q),1);
+step=numel(Q)/length(k);
+for l=1:length(k)
+    group((l-1)*step+1:l*step)=k(l);
+    value((l-1)*step+1:l*step)=reshape(Q(:,l,:),[1 numel(Q)/length(k)]);
+end
+boxplot(value,group);
+
+xlabel('No. of nearest neighbors');
+ylabel('Moduality');
+
+hold off;
+try
+    saveas(h,['.',path,'\k_Q_detail.jpg']);
+    saveas(h,['.',path,'\k_Q_detail.eps']);
+catch
+end
+
 h=figure('name','Q_eta');
 sQ=zeros(length(eta),length(nc));
 hold on;
