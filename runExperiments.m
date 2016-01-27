@@ -48,7 +48,7 @@ for i=1:length(c)
     for j=1:length(k)
         for l=1:length(eta)
             try
-                [y, ~, W, distX, ~]=LPT(D,c(i),k(j),eta(l));
+                [y, ~, W, distX, ~]=LPS(D,c(i),k(j),eta(l));
             catch
                 continue;
             end

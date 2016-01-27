@@ -1,4 +1,4 @@
-function [y, P, W, distX, evs] = LPT(D, c, k, eta, islocal)
+function [y, P, W, distX, evs] = LPS(D, c, k, eta, islocal)
 
 % D: num*num*level distance matrix, each sub matrix ia the level distance matrix
 % c: number of clusters
@@ -111,7 +111,7 @@ for iter = 1:NITER
     W=expNorm(-W/eta);
     
     %update distance
-    distX=computeWeightDistance(W,D);%full dist--weight distanceï¼›
+    distX=computeWeightDistance(W,D);%full dist--weight distanceï¼?
     [~, idx] = sort(distX,2);
     if islocal
         idx=idx(:,2:k+1);
