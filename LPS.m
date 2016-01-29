@@ -210,7 +210,7 @@ for iter = 1:NITER
         lambda = 1.2*lambda;
         eta=eta*1.1;
     elseif fn2 < 1e-11
-        lambda = lambda/1.2;
+        lambda = lambda/1.1;
         eta=eta/1.05;
         F = F_old;
     else
