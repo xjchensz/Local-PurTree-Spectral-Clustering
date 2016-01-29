@@ -23,11 +23,18 @@ k=5:5:50;
 
 numK=[2,2,3,3];
 
+index=1;
+
+if index>=0
+    start=0;
+    for i=1:index-1
+        start=start+numK(i);
+    end
+    k=k(start+1:start+numK(index));
+end
+
 % number of clusters
 c=5:50;
-
-
-index=1;
 
 num=size(D,1);
 
