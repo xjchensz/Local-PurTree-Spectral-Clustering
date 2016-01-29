@@ -17,7 +17,7 @@ for i=1:level
     D(:,:,i)=num;
 end
 
-[y, P, W, distX, evs]=LPS(D,2,2,0.8);
+[y, P, W, distX, evs]=LPS(D,2,2);
 q=computeQ(distX,y);
 sprintf('lq: %f', q);
 

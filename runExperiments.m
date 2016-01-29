@@ -21,46 +21,36 @@ sprintf('The number of objects is: %d', size(D,1))
 % nearest neighbors
 k=5:5:50;
 
+numK=[2,2,3,3];
+
 % number of clusters
 c=5:50;
 
-% eta
-eta=0.1:0.1:2;
-numEta=[5,5,5,5];
 
-index=2;
-if index>=0
-    start=0;
-    for i=1:index-1
-        start=start+numEta(i);
-    end
-    eta=eta(start+1:start+numEta(index));
-end
+index=1;
 
 num=size(D,1);
 
-lw=zeros(length(eta),length(k),length(c));
-ncm=zeros(length(eta),length(k),length(c));
-wm=zeros(length(eta),length(k),length(c),level);
-Q=zeros(length(eta),length(k),length(c));
+lw=zeros(length(k),length(c));
+ncm=zeros(length(k),length(c));
+wm=zeros(length(k),length(c),level);
+Q=zeros(length(k),length(c));
 
 for i=1:length(c)
     for j=1:length(k)
-        for l=1:length(eta)
-            try
-                [y, ~, W, distX, ~]=LPS(D,c(i),k(j),eta(l));
-            catch
-                continue;
-            end
-            nc=length(unique(y));
-            ncm(l,j,i)=nc;
-            wm(l,j,i,:)=W;
-            lw(l,j,i)=logWK(distX,y);
-            Q(l,j,i)=computeQ(distX,y);
+        try
+            [y, ~, W, distX, ~]=LPS(D,c(i),k(j));
+        catch
+            continue;
         end
+        nc=length(unique(y));
+        ncm(j,i)=nc;
+        wm(j,i,:)=W;
+        lw(j,i)=logWK(distX,y);
+        Q(j,i)=computeQ(distX,y);
+        
     end
 end
-
 
 
 if index>=0

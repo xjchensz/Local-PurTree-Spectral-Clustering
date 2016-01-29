@@ -1,4 +1,4 @@
-function [y, P, W, distX, evs] = LPS(D, c, k, eta, islocal)
+function [y, P, W, distX, evs] = LPS(D, c, k, islocal, eta)
 
 % D: num*num*level distance matrix, each sub matrix ia the level distance matrix
 % c: number of clusters
@@ -16,8 +16,7 @@ function [y, P, W, distX, evs] = LPS(D, c, k, eta, islocal)
 %
 %%
 
-
-NITER = 30;
+NITER = 50;
 level=size(D,3); %levels
 num = size(D,2);%no. of objects
 
@@ -30,12 +29,9 @@ if k>num-2
 end;
 
 if nargin<4
-    eta=0.5;
-end;
-
-if nargin<5
     islocal=1;
 end;
+
 
 
 P = zeros(num,num);
@@ -43,30 +39,85 @@ W = zeros(level,1);%weights
 W(:) = 1/level;
 rr = zeros(num,1);
 distX=computeWeightDistance(W,D);
-eta=eta*sum(sum(distX))/num;
+b=zeros(level,2);
 
-[~, idx] = sort(distX,2);
 if islocal
-    distK_1=distX(:,k+1);%local distance
-    idx=idx(:,2:k+1);
-    
+    DA = sort(D,2);
+    [~, idx] = sort(distX,2);
+    if nargin<5
+        eta=0;
+        nn=0;
+    end
     for i = 1:num
-        id=idx(i,:);
-        di = distX(i,id);
-        rr(i) = 0.5*(k*distK_1(i,1)-sum(di));
-        P(i,id)=distK_1(i,1)-di;
+        id=idx(i,2:k+1);
+        di = distX(id);
+        ddk_1=k*DA(i,k+2,:)-sum(DA(i,2:k+1,:),2);
+        ddk=k*DA(i,k+1,:)-sum(DA(i,2:k+1,:),2);
+        rr(i) = 0.5*(max(ddk)+min(ddk_1));
+        
+        if nargin<5
+            for l=1:level
+                for h=1:level
+                    F=DA(i,2:k+1,h)-DA(i,2:k+1,l);
+                    b(l,1)=b(l,1)+min(F,[],2);
+                    b(l,2)=b(l,2)+max(F,[],2);
+                end
+            end
+            
+            eek=0.5*sum(reshape(sum(ddk,2),[level,1]).*b(:,2))/(2*level*rr(i)-sum(sum(ddk,3),2));
+            eek1=0.5*sum(reshape(sum(ddk_1,2),[level,1]).*b(:,1))/(2*level*rr(i)-sum(sum(ddk_1,3),2));
+            if eek>0 && eek1>0
+                eta=eta+0.5*(eek+eek1);
+                nn=nn+1;
+            end
+        end;
+        
+        P(i,id)=distX(idx(i,k+2))-di;
         y=sum(P(i,:));
         if y==0
             P(i,id)=1/k;
         else
             P(i,id)= P(i,id)/y;
         end
-    end;
+    end
+    
+    if nargin<5
+        if nn<=0
+            eta=sum(DA(i,2:k+1,:));
+        else
+            eta=eta/nn;
+        end
+    end
 else
+    if nargin<5
+        eta=0;
+        nn=0;
+    end
+    
     for i = 1:num
         di = distX(i,:);
-        rr(i) = 0.5*(num*distX(i,idx(i,num))-sum(di));
-        P(i,:)=distX(i,idx(i,num))-di;
+        
+        dd=size(D,1)*max(D(i,:,:),[],2)-sum(D(i,:,:),2);
+        rr(i) = mean(dd);
+        
+        if nargin<5
+            for l=1:level
+                for h=1:level
+                    F=D(i,:,h)-D(i,:,l);
+                    b(l,1)=b(l,1)+min(F,[],2);
+                    b(l,2)=b(l,2)+max(F,[],2);
+                end
+            end
+            
+            
+            eek=0.5*sum(reshape(sum(dd,2),[level,1]).*b(:,2))/(2*level*rr(i)-sum(sum(dd,3),2));
+            if eek>0
+                eta=eta+eek;
+                nn=nn+1;
+            end
+        end;
+        
+        P(i,:)=distX(i,:)-di;
         y=sum(P(i,:))-di(i);
         if y==0
             P(i,:)=1/num;
@@ -74,14 +125,19 @@ else
             P(i,:)= P(i,:)/y;
         end
         P(i,i)=0;
-    end;
+    end
+    
+    if nargin<5
+        if nn<=0
+            eta=sum(D(i,:,:));
+        else
+            eta=eta/nn;
+        end
+    end
 end
-
-
 
 r = mean(rr);
 lambda = mean(rr);
-
 P0 = (P+P')/2;
 D0 = diag(sum(P0));
 L0 = D0 - P0;
@@ -108,7 +164,9 @@ for iter = 1:NITER
             end
         end
     end
-    W=expNorm(-W/eta);
+    W=mean(W)-W;
+    W=1/level+W/(2*eta);
+    W=positiveNorm(W);
     
     %update distance
     distX=computeWeightDistance(W,D);%full dist--weight distanceï¼?
@@ -149,9 +207,11 @@ for iter = 1:NITER
     fn2 = sum(ev(1:c+1));
     if fn1 > 1e-11
         % more clusters than expected
-        lambda = 2*lambda;
+        lambda = 1.2*lambda;
+        eta=eta*2;
     elseif fn2 < 1e-11
-        lambda = lambda/2;
+        lambda = lambda/1.2;
+        eta=eta/1.5;
         F = F_old;
     else
         break;

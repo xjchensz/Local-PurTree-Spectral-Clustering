@@ -21,7 +21,7 @@ end
 sprintf('The number of objects is: %d', size(D,1))
 
 c=50;
-[y, P, W, distX, evs]=LPT(D,c,50,0.8);
+[y, P, W, distX, evs]=LPS(D,c,50);
 
 sprintf('LogWk: %d', logWK(distX,y))
 draw_Dist(y,distX);
