@@ -208,10 +208,8 @@ for iter = 1:NITER
     if fn1 > 1e-11
         % more clusters than expected
         lambda = 1.2*lambda;
-        eta=eta*2;
     elseif fn2 < 1e-11
         lambda = lambda/1.2;
-        eta=eta/1.5;
         F = F_old;
     else
         break;

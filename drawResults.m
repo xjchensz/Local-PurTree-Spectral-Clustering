@@ -13,7 +13,7 @@ load(['.',path,'\ncm.mat'],'ncm');
 load(['.',path,'\wm.mat'],'wm');
 load(['.',path,'\Q.mat'],'Q');
 
-level = size(wm,4);
+level = size(wm,3);
 
 
 % nearest neighbors
