@@ -22,129 +22,63 @@ k=5:5:50;
 % number of clusters
 c=5:50;
 
-% eta
-eta=0.1:0.1:2;
-
 
 lineType={'b-*','r-+','k-o','y-x','g-*','c-.','m-s'};
 
-%draw eta-weights
-figure('name','Wegiths');
+%draw k-weights
+h=figure('name','k-Wegiths');
 hold on;
 labelW=cell(level,1);
 
-mwm=mean(mean(wm,2),3);
+mwm=mean(wm,2);
 for i=1:level
-    h=plot(eta,mwm(:,1,1,i),lineType{i});
+    plot(k,mwm(:,1,i),lineType{i});
     labelW{i}=['w',num2str(i)];
 end
 hold off;
-xlabel('\eta');
+xlabel('k');
 ylabel('Weights');
 legend(labelW);
-saveas(h,['.',path,'\eta_weights.jpg']);
-saveas(h,['.',path,'\eta_weights.eps']);
+saveas(h,['.',path,'\k_weights.jpg']);
+saveas(h,['.',path,'\k_weights.eps']);
 
-%draw detailed k-c
-h=figure('name','k_c_detail');
+%draw c-weights
+h=figure('name','c-Wegiths');
 hold on;
-labelC=cell(length(c),1);
-for j=1:length(c)
-    labelC{j}=['c=',num2str(c(j))];
+labelW=cell(level,1);
+
+mwm=mean(wm,3);
+for i=1:level
+    plot(k,mwm(:,1,i),lineType{i});
+    labelW{i}=['w',num2str(i)];
 end
+hold off;
+xlabel('c');
+ylabel('Weights');
+legend(labelW);
+saveas(h,['.',path,'\c_weights.jpg']);
+saveas(h,['.',path,'\c_weights.eps']);
 
 
-dncm=permute(repmat(repmat(c',[1,length(k)]),[1,1,length(eta)]),[3,2,1]);
+%draw k-c
+
+h=figure('name','k_c');
+hold on;
+
+dncm=repmat(c',[1,length(k)]);
 dncm=ncm-dncm;
 
-ymin=min(min(min(dncm)));
-ymax=max(max(max(dncm)));
-
-for i=1:length(eta)
-    %surf(repmat(k',[1,length(c)]),repmat(c,[length(k),1]),reshape(ncm(i,:,:),[length(k),length(c)]));
-    index=mod(i,length(lineType));
-    if ~index
-        index=length(lineType);
-    end
-    subplot(4,5,i);
-    %surf(repmat(k',[1,length(c)]),repmat(c,[length(k),1]),reshape(ncm(i,:,:),[length(k),length(c)]));
-    index=mod(i,length(lineType));
-    if ~index
-        index=length(lineType);
-    end
-    h=plot(k,reshape(dncm(i,:,:),[size(dncm,2),size(dncm,3)]),lineType{index});
-    xlabel('No. of nearest neighbors');
-    ylabel('Difference no. of clusters');
-    zlabel('No. of clusters');
-    axis([c(1) c(length(c)) ymin-10 ymax+10])
-    %legend(labelC);
-end
-
-
-hold off;
-try
-    saveas(h,['.',path,'\k_c_detail.jpg']);
-    saveas(h,['.',path,'\k_c_detail.eps']);
-catch
-end
-
-%draw mean k-c
-
-h=figure('name','k_c_mean');
-hold on;
-
-mdncm=reshape(mean(dncm,1),[length(k),length(c)]);
-
-ymin=min(min(min(mdncm)));
-ymax=max(max(max(mdncm)));
-
-plot(k,mdncm,lineType{1});
-xlabel('No. of nearest neighbors');
+plot(k,ncm,lineType{1});
+xlabel('k');
 ylabel('Difference no. of clusters');
-zlabel('No. of clusters');
-axis([c(1) c(length(c)) ymin-10 ymax+10])
 
 hold off;
 try
-    saveas(h,['.',path,'\k_c_mean.jpg']);
-    saveas(h,['.',path,'\k_c_mean.eps']);
+    saveas(h,['.',path,'\k_c.jpg']);
+    saveas(h,['.',path,'\k_c.eps']);
 catch
 end
 
-
-%draw c-logWk
-
-nc=unique(ncm);
-[nc,~]=sort(nc);
-[~,~,ncv]=find(nc);
-nc=ncv;
-%nc=ncv(ncv<=max(c));
-mlw=zeros(length(eta),length(nc));
-for i=1:length(eta)
-    for j=1:length(nc)
-        id=find(ncm(i,:,:)==nc(j));
-        mlw(i,j)=sum(lw(i,id))/length(id);
-    end
-end
-
-figure('name','logWk');
-hold on;
-
-
-for i=1:length(eta)
-    index=mod(i,length(lineType));
-    if index==0
-        index=length(lineType);
-    end
-    h=plot(nc,mlw(i,:),lineType{index});
-end
-hold off;
-xlabel('No. of clusters');
-ylabel('Log(Wk)');
-% hleg = legend(labelEta,'Location', 'EastOutside');
-
-saveas(h,['.',path,'\logWk.jpg']);
-saveas(h,['.',path,'\logWk.eps']);
 
 
 %draw k-Q
@@ -153,10 +87,7 @@ saveas(h,['.',path,'\logWk.eps']);
 figure('name','k_Q');
 hold on;
 
-ymin=min(min(min(mdncm)));
-ymax=max(max(max(mdncm)));
-
-h=plot(k,mean(mean(Q,3),1),lineType{1});
+h=plot(k,Q,lineType{1});
 xlabel('No. of nearest neighbors');
 ylabel('Moduality');
 
@@ -167,63 +98,6 @@ try
 catch
 end
 
-
-%draw k-Q_detali
-h=figure('name','k_Q_detail');
-hold on;
-
-value=zeros(numel(Q),1);
-group=zeros(numel(Q),1);
-step=numel(Q)/length(k);
-for l=1:length(k)
-    group((l-1)*step+1:l*step)=k(l);
-    value((l-1)*step+1:l*step)=reshape(Q(:,l,:),[1 numel(Q)/length(k)]);
-end
-boxplot(value,group);
-
-xlabel('No. of nearest neighbors');
-ylabel('Moduality');
-
-hold off;
-try
-    saveas(h,['.',path,'\k_Q_detail.jpg']);
-    saveas(h,['.',path,'\k_Q_detail.eps']);
-catch
-end
-
-h=figure('name','Q_eta');
-sQ=zeros(length(eta),length(nc));
-hold on;
-for j=1:length(nc)
-    sQ(:,j)=NaN;
-    for i=1:length(eta)
-        id=find(ncm(i,:,:)==nc(j));
-        if ~isempty(id)
-            sQ(i,j)=mean(Q(i,id));
-        end
-    end
-    plot(eta,sQ(:,j),'k-o','color',rand(1,3));
-end
-
-hold off;
-xlabel('\eta');
-ylabel('Q');
-legend (labelC, 'Location', 'EastOutside');
-saveas(h,['.',path,'\Q_eta.jpg']);
-saveas(h,['.',path,'\Q_eta.eps']);
-
-
-h=figure('name','Q_mean_eta');
-hold on;
-
-sQ=mean(mean(Q,3),2);
-plot(eta,sQ,lineType{1});
-
-hold off;
-xlabel('\eta');
-ylabel('Q');
-saveas(h,['.',path,'\Q_mean_eta.jpg']);
-saveas(h,['.',path,'\Q_mean_eta.eps']);
 
 %draw c_Q
 
@@ -265,30 +139,6 @@ ylabel('Moduality');
 saveas(h,['.',path,'\Q_detail.jpg']);
 saveas(h,['.',path,'\Q_detail.eps']);
 
-
-h=figure('name','Q_eta');
-sQ=zeros(length(eta),length(nc));
-hold on;
-for i=1:length(eta)
-    
-    sQ(i,:)=NaN;
-    for j=1:length(nc)
-        id=find(ncm(i,:,:)==nc(j));
-        if ~isempty(id)
-            sQ(i,j)=max(max(Q(i,id)));
-        end
-    end
-    id=~isnan(sQ(i,:));
-    labelEta{i}=['\eta=',num2str(eta(i))];
-    plot(nc(id),sQ(i,id),'k-o','color',rand(1,3));
-end
-
-hold off;
-xlabel('\eta');
-ylabel('No. of clusters');
-legend (labelEta, 'Location', 'EastOutside');
-saveas(h,['.',path,'\Q_eta.jpg']);
-saveas(h,['.',path,'\Q_eta.eps']);
 
 
 h=figure('name','Q_mean');

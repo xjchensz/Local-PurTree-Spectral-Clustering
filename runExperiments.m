@@ -23,7 +23,7 @@ k=5:5:50;
 
 numK=[2,2,3,3];
 
-index=1;
+index=4;
 
 if index>=0
     start=0;
