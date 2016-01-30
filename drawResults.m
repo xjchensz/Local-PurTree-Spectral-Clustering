@@ -28,8 +28,12 @@ k=5:5:50;
 % number of clusters
 c=5:50;
 
+nc=unique(ncm);
+[nc,~]=sort(nc);
+[~,~,ncv]=find(nc);
+nc=ncv(ncv<=300);
 
-lineType={'b-*','r-+','k-o','y-x','g-*','c-.','m-s'};
+lineType={'b-*','r-+','k-o','c-x','g-*','c-.','m-s'};
 
 %draw k-weights
 h=figure('name','k-Wegiths');
@@ -53,10 +57,15 @@ saveas(h,['.',path,'\k_weights.eps']);
 h=figure('name','c-Wegiths');
 hold on;
 labelW=cell(level,1);
+mwm=zeros(length(nc),level);
 
-mwm=mean(wm,1);
+for j=1:length(nc)
+    [row, col]=find(ncm==nc(j));
+    mwm(j,:)=mean(mean(wm(row,col,:),2),1);
+end
+
 for i=1:level
-    plot(c,mwm(1,:,i),lineType{i});
+    plot(nc,mwm(:,i),lineType{i});
     labelW{i}=['w',num2str(i)];
 end
 grid on;
@@ -111,11 +120,6 @@ end
 
 
 %draw c_Q
-
-nc=unique(ncm);
-[nc,~]=sort(nc);
-[~,~,ncv]=find(nc);
-nc=ncv(ncv<=300);
 
 
 h=figure('name','c_Qmean');
