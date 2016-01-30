@@ -4,12 +4,14 @@ function [ Q ] = computeQ( distX, y )
 cluster=unique(y);
 Q=0;
 
-m=sum(sum(distX));
-d=sum(distX,2);
+simX=1-distX;
+
+s=sum(simX,2);
+m=sum(s);
 for i=1:length(cluster)
     idx=find(y==cluster(i));
-    Q=Q+sum(sum(distX(idx,idx)- (d(idx)*d(idx)')/(2*m)));
+    Q=Q+sum(sum(simX(idx,idx)- (s(idx)*s(idx)')/m));
 end
-Q=Q/(2*m);
+Q=Q/m;
 
 

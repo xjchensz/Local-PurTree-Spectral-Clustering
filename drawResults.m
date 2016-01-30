@@ -35,28 +35,42 @@ nc=ncv(ncv<=300);
 
 lineType={'b-*','r-+','k-o','c-x','g-*','c-.','m-s'};
 
+figure_FontSize=20;
+legend_FondSize=20;
+
 %draw k-weights
 h=figure('name','k-Wegiths');
+set(get(gca,'XLabel'),'FontSize',figure_FontSize,'Vertical','top');
+set(get(gca,'YLabel'),'FontSize',figure_FontSize,'Horizontal','right');
+set(findobj('FontSize',10),'FontSize',figure_FontSize);
 hold on;
 labelW=cell(level,1);
 
 mwm=mean(wm,2);
 for i=1:level
     plot(k,mwm(:,1,i),lineType{i});
-    labelW{i}=['w',num2str(i)];
+    labelW{i}=['\omega',num2str(i)];
 end
 grid on;
 hold off;
 xlabel('k');
 ylabel('Weights');
-legend(labelW);
+hl=legend(labelW,'Location','NorthOutside');
+set(hl,'Fontsize',legend_FondSize);
+set(hl,'Orientation','horizon');
+set(gca,'ylim',[0 0.6]);
+
 saveas(h,['.',path,'\k_weights.jpg']);
-saveas(h,['.',path,'\k_weights.eps']);
+saveas(h,['.',path,'\k_weights.eps'],'psc2');
+
 
 %draw c-weights
 h=figure('name','c-Wegiths');
+set(get(gca,'XLabel'),'FontSize',figure_FontSize,'Vertical','top');
+set(get(gca,'YLabel'),'FontSize',figure_FontSize,'Horizontal','right');
+set(findobj('FontSize',10),'FontSize',figure_FontSize);
+set(gca,'ylim',[0 0.6]);
 hold on;
-labelW=cell(level,1);
 mwm=zeros(length(nc),level);
 
 for j=1:length(nc)
@@ -66,15 +80,17 @@ end
 
 for i=1:level
     plot(nc,mwm(:,i),lineType{i});
-    labelW{i}=['w',num2str(i)];
 end
 grid on;
 hold off;
 xlabel('c');
 ylabel('Weights');
-legend(labelW);
+hl=legend(labelW,'Location','NorthOutside');
+set(hl,'Fontsize',legend_FondSize);
+set(hl,'Orientation','horizon');
+
 saveas(h,['.',path,'\c_weights.jpg']);
-saveas(h,['.',path,'\c_weights.eps']);
+saveas(h,['.',path,'\c_weights.eps'],'psc2');
 
 
 %draw k-c
@@ -143,6 +159,7 @@ saveas(h,['.',path,'\c_Qmean.eps']);
 
 
 h=figure('name','c_Qmax');
+set(findobj('FontSize',10),'FontSize',figure_FontSize);
 hold on;
 maxQ=zeros(length(nc),1);
 maxQ=NaN;
@@ -154,13 +171,14 @@ for j=1:length(nc)
 end
 id=~isnan(maxQ);
 plot(nc(id),maxQ(id),lineType{1});
+axis([ -inf inf 0 0.22])
 
 grid on;
 hold off;
-xlabel('No. of clusters');
+xlabel('c');
 ylabel('Moduality');
 
-saveas(h,['.',path,'\c_Qmax_lpt.eps']);
+saveas(h,['.',path,'\c_Qmax_lpt.eps'],'psc2');
 saveas(h,['.',path,'\c_Qmax_lpt.jpg']);
 
 %%

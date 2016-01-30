@@ -20,6 +20,8 @@ Q=Q(:,2:size(Q,2));
 
 lineType={'b-o','r-o','k-o','y-o','g-o','c-o','m-o'};
 
+figure_FontSize=20;
+legend_FondSize=20;
 
 %draw c_Q
 
@@ -90,7 +92,8 @@ saveas(h,[path,'\Q_mean.eps']);
 
 
 
-figure('name','Q_max');
+figure('name','Q_max_ptc');
+set(findobj('FontSize',10),'FontSize',figure_FontSize);
 hold on;
 maxQ=zeros(length(c),1);
 
@@ -98,14 +101,15 @@ for j=1:length(c)
     maxQ(j,1)=max(Q(:,j));
 end
 h=plot(c,maxQ,lineType{1});
-axis([ -inf inf 0 0.25])
+axis([ -inf inf 0 0.22])
 
+grid on;
 hold off;
 xlabel('No. of clusters');
 ylabel('Moduality');
 % hleg = legend(labelEta,'Location', 'EastOutside');
 
-saveas(h,[path,'\Q_max_ptc.eps']);
+saveas(h,[path,'\Q_max_ptc.eps'],'psc2');
 
 
 %%
