@@ -1,6 +1,7 @@
 %%
 clc;
-%clear all;
+clear all;
+close all;
 
 folder_now = pwd;
 path='\dis_1338';
@@ -12,6 +13,11 @@ load(['.',path,'\lw.mat'],'lw');
 load(['.',path,'\ncm.mat'],'ncm');
 load(['.',path,'\wm.mat'],'wm');
 load(['.',path,'\Q.mat'],'Q');
+
+id=find(ncm<=0);
+ncm(id)=nan;
+Q(id)=nan;
+
 
 level = size(wm,3);
 
@@ -47,9 +53,9 @@ h=figure('name','c-Wegiths');
 hold on;
 labelW=cell(level,1);
 
-mwm=mean(wm,3);
+mwm=mean(wm,1);
 for i=1:level
-    plot(k,mwm(:,1,i),lineType{i});
+    plot(c,mwm(1,:,i),lineType{i});
     labelW{i}=['w',num2str(i)];
 end
 hold off;
@@ -65,7 +71,8 @@ saveas(h,['.',path,'\c_weights.eps']);
 h=figure('name','k_c');
 hold on;
 
-dncm=repmat(c',[1,length(k)]);
+
+dncm=repmat(c,[length(k),1]);
 dncm=ncm-dncm;
 
 plot(k,ncm,lineType{1});
@@ -105,67 +112,28 @@ nc=unique(ncm);
 [nc,~]=sort(nc);
 [~,~,ncv]=find(nc);
 nc=ncv(ncv<=300);
-%nc=ncv(ncv<=max(c));
 
 
-h=figure('name','Q_detail');
+h=figure('name','c_Qmean');
 hold on;
-dQ=zeros(length(nc),1);
-labelEta=cell(length(eta),1);
-for i=1:length(eta)
-    index=mod(i,length(lineType));
-    if ~index
-        index=length(lineType);
-    end
-    subplot(4,5,i);
-    index=mod(i,length(lineType));
-    if ~index
-        index=length(lineType);
-    end
-    dQ(:,1)=NaN;
-    for j=1:length(nc)
-        id=find(ncm(i,:,:)==nc(j));
-        dQ(j,1)=sum(Q(i,id))/length(id);
-    end
-    plot(nc,dQ(:,1),lineType{index});
-    xlabel('No. of clusters');
-    ylabel('Moduality');
+mQ=zeros(length(nc),1);
+mQ=NaN;
+for j=1:length(nc)
+    id=find(ncm==nc(j));
+    mQ(j,1)=sum(Q(id))/length(id);
 end
-
+plot(nc,mQ,lineType{1});
 
 hold off;
 xlabel('No. of clusters');
 ylabel('Moduality');
-saveas(h,['.',path,'\Q_detail.jpg']);
-saveas(h,['.',path,'\Q_detail.eps']);
 
 
-
-h=figure('name','Q_mean');
-hold on;
-mQ=zeros(length(eta),length(nc));
-for i=1:length(eta)
-    for j=1:length(nc)
-        id=find(ncm(i,:,:)==nc(j));
-        mQ(i,j)=sum(Q(i,id))/length(id);
-    end
-    index=mod(i,length(lineType));
-    if index==0
-        index=length(lineType);
-    end
-    plot(nc,mQ(i,:),lineType{index});
-end
-
-hold off;
-xlabel('No. of clusters');
-ylabel('Moduality');
-% hleg = legend(labelEta,'Location', 'EastOutside');
-
-saveas(h,['.',path,'\Q_mean.jpg']);
-saveas(h,['.',path,'\Q_mean.eps']);
+saveas(h,['.',path,'\c_Qmean.jpg']);
+saveas(h,['.',path,'\c_Qmean.eps']);
 
 
-h=figure('name','Q_max');
+h=figure('name','c_Qmax');
 hold on;
 maxQ=zeros(length(nc),1);
 maxQ=NaN;
@@ -183,10 +151,8 @@ axis([ -inf inf 0 0.3])
 hold off;
 xlabel('No. of clusters');
 ylabel('Moduality');
-% hleg = legend(labelEta,'Location', 'EastOutside');
 
-saveas(h,['.',path,'\Q_max_lpt.eps']);
-saveas(h,['.',path,'\Q_max_lpt.jpg']);
-
+saveas(h,['.',path,'\c_Qmax_lpt.eps']);
+saveas(h,['.',path,'\c_Qmax_lpt.jpg']);
 
 %%
