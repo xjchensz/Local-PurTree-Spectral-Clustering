@@ -41,6 +41,7 @@ for i=1:level
     plot(k,mwm(:,1,i),lineType{i});
     labelW{i}=['w',num2str(i)];
 end
+grid on;
 hold off;
 xlabel('k');
 ylabel('Weights');
@@ -58,6 +59,7 @@ for i=1:level
     plot(c,mwm(1,:,i),lineType{i});
     labelW{i}=['w',num2str(i)];
 end
+grid on;
 hold off;
 xlabel('c');
 ylabel('Weights');
@@ -79,6 +81,7 @@ plot(k,ncm,lineType{1});
 xlabel('k');
 ylabel('Difference no. of clusters');
 
+grid on;
 hold off;
 try
     saveas(h,['.',path,'\k_c.jpg']);
@@ -98,6 +101,7 @@ h=plot(k,Q,lineType{1});
 xlabel('No. of nearest neighbors');
 ylabel('Moduality');
 
+grid on;
 hold off;
 try
     saveas(h,['.',path,'\k_Q.jpg']);
@@ -124,6 +128,7 @@ for j=1:length(nc)
 end
 plot(nc,mQ,lineType{1});
 
+grid on;
 hold off;
 xlabel('No. of clusters');
 ylabel('Moduality');
@@ -145,9 +150,8 @@ for j=1:length(nc)
 end
 id=~isnan(maxQ);
 plot(nc(id),maxQ(id),lineType{1});
-axis([ -inf inf 0 0.3])
 
-
+grid on;
 hold off;
 xlabel('No. of clusters');
 ylabel('Moduality');
