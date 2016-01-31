@@ -7,7 +7,7 @@ folder_now = pwd;
 
 path='.';
 
-files = cell(4,2);
+files = cell(5,2);
 files{1,1}='\Q_ptc.csv';
 files{1,2}='ptc';
 
@@ -19,6 +19,9 @@ files{3,2}='hac_ml';
 
 files{4,1}='\Q_hac_SINGLE_LINKAGE.csv';
 files{4,2}='hac_sl';
+
+files{4,1}='\Q_dbscan.csv';
+files{4,2}='dbscan';
 
 lineType={'b-*','r-*','k-*','c-*','g-*','m-*'};
 figure_FontSize=20;
