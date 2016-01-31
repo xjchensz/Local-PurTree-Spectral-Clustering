@@ -55,7 +55,7 @@ for i=1:length(c)
         wm(j,i,:)=W;
         lw(j,i)=logWK(distX,y);
         Q(j,i)=computeQ(distX,y);
-        
+        sprintf('Q: %d', Q(j,i))
     end
 end
 

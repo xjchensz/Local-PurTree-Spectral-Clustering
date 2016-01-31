@@ -1,13 +1,14 @@
 %%
 clc;
-%clear all;
+clear all;
+close all;
 
 folder_now = pwd;
 
 path='.';
 
 files = cell(4,2);
-files{1,1}='\Q.csv';
+files{1,1}='\Q_ptc.csv';
 files{1,2}='ptc';
 
 files{2,1}='\Q_hac_COMPLETE_LINKAGE.csv';
@@ -19,7 +20,7 @@ files{3,2}='hac_ml';
 files{4,1}='\Q_hac_SINGLE_LINKAGE.csv';
 files{4,2}='hac_sl';
 
-lineType={'b-o','r-o','k-o','y-o','g-o','c-o','m-o'};
+lineType={'b-*','r-*','k-*','c-*','g-*','m-*'};
 figure_FontSize=20;
 legend_FondSize=20;
 
@@ -37,6 +38,30 @@ for i=1:size(files,1)
     
     Q(Q==0)=NaN;
     
+    % Q
+    h=figure('name',['Q_',files{i,2}]);
+    set(get(gca,'XLabel'),'FontSize',figure_FontSize,'Vertical','top');
+    set(get(gca,'YLabel'),'FontSize',figure_FontSize,'Horizontal','right');
+    set(findobj('FontSize',10),'FontSize',figure_FontSize);
+    hold on;
+    labelGamma=cell(length(gamma),1);
+    
+    for j=1:length(gamma)
+        plot(c,Q(j,:),lineType{j});
+        labelGamma{j}=['\gamma=',num2str(gamma(j))];
+    end
+    axis([ 5 150 0 0.15])
+    
+    grid on;
+    hold off;
+    xlabel('c');
+    ylabel('Q');
+    hl=legend(labelGamma);
+    set(hl,'Fontsize',legend_FondSize);
+    
+    saveas(h,[path,'\Q_', files{i,2}, '.eps'],'psc2');
+    
+    % Q_max
     figure('name',['Qmax_',files{i,2}]);
     set(findobj('FontSize',10),'FontSize',figure_FontSize);
     hold on;
@@ -46,7 +71,7 @@ for i=1:size(files,1)
         maxQ(j,1)=max(Q(:,j));
     end
     h=plot(c,maxQ,lineType{1});
-    axis([ -inf inf 0 0.22])
+    axis([ 5 150 0 0.15])
     
     grid on;
     hold off;

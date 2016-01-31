@@ -1,4 +1,4 @@
-function [y, P, W, distX, evs] = LPS(D, c, k, islocal, eta)
+function [y, P, W, distX, evs] = LPS(D, c, k, negativeEta, islocal, eta)
 
 % D: num*num*level distance matrix, each sub matrix ia the level distance matrix
 % c: number of clusters
@@ -29,6 +29,10 @@ if k>num-2
 end;
 
 if nargin<4
+    negativeEta=0;
+end;
+
+if nargin<5
     islocal=1;
 end;
 
@@ -44,7 +48,7 @@ b=zeros(level,2);
 if islocal
     DA = sort(D,2);
     [~, idx] = sort(distX,2);
-    if nargin<5
+    if nargin<6
         eta=0;
         nn=0;
     end
@@ -55,7 +59,7 @@ if islocal
         ddk=k*DA(i,k+1,:)-sum(DA(i,2:k+1,:),2);
         rr(i) = 0.5*(max(ddk)+min(ddk_1));
         
-        if nargin<5
+        if nargin<6
             for l=1:level
                 for h=1:level
                     F=DA(i,2:k+1,h)-DA(i,2:k+1,l);
@@ -81,7 +85,7 @@ if islocal
         end
     end
     
-    if nargin<5
+    if nargin<6
         if nn<=0
             eta=sum(DA(i,2:k+1,:));
         else
@@ -89,7 +93,7 @@ if islocal
         end
     end
 else
-    if nargin<5
+    if nargin<6
         eta=0;
         nn=0;
     end
@@ -100,7 +104,7 @@ else
         dd=size(D,1)*max(D(i,:,:),[],2)-sum(D(i,:,:),2);
         rr(i) = mean(dd);
         
-        if nargin<5
+        if nargin<6
             for l=1:level
                 for h=1:level
                     F=D(i,:,h)-D(i,:,l);
@@ -127,13 +131,17 @@ else
         P(i,i)=0;
     end
     
-    if nargin<5
+    if nargin<6
         if nn<=0
             eta=sum(D(i,:,:));
         else
             eta=eta/nn;
         end
     end
+end
+
+if nargin<6 && negativeEta
+    eta=-eta;
 end
 
 r = mean(rr);
@@ -169,7 +177,7 @@ for iter = 1:NITER
     W=positiveNorm(W);
     
     %update distance
-    distX=computeWeightDistance(W,D);%full dist--weight distanceï¼?
+    distX=computeWeightDistance(W,D);%full dist--weight distance
     [~, idx] = sort(distX,2);
     if islocal
         idx=idx(:,2:k+1);
@@ -208,10 +216,14 @@ for iter = 1:NITER
     if fn1 > 1e-11
         % more clusters than expected
         lambda = 1.2*lambda;
-        eta=eta*1.1;
+        if nargin<6
+            eta=eta*1.2;
+        end
     elseif fn2 < 1e-11
         lambda = lambda/1.1;
-        eta=eta/1.05;
+        if nargin<6
+            eta=eta/1.1;
+        end
         F = F_old;
     else
         break;

@@ -31,7 +31,7 @@ c=5:50;
 nc=unique(ncm);
 [nc,~]=sort(nc);
 [~,~,ncv]=find(nc);
-nc=ncv(ncv<=300);
+nc=ncv(ncv<=150);
 
 lineType={'b-*','r-+','k-o','c-x','g-*','c-.','m-s'};
 
@@ -159,6 +159,8 @@ saveas(h,['.',path,'\c_Qmean.eps']);
 
 
 h=figure('name','c_Qmax');
+set(get(gca,'XLabel'),'FontSize',figure_FontSize,'Vertical','top');
+set(get(gca,'YLabel'),'FontSize',figure_FontSize,'Horizontal','right');
 set(findobj('FontSize',10),'FontSize',figure_FontSize);
 hold on;
 maxQ=zeros(length(nc),1);
@@ -171,7 +173,7 @@ for j=1:length(nc)
 end
 id=~isnan(maxQ);
 plot(nc(id),maxQ(id),lineType{1});
-axis([ -inf inf 0 0.22])
+axis([ 5 150 0 0.15])
 
 grid on;
 hold off;
