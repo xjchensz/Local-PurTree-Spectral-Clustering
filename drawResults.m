@@ -26,7 +26,7 @@ level = size(wm,3);
 k=5:5:50;
 
 % number of clusters
-c=5:50;
+c=5:150;
 
 nc=unique(ncm);
 [nc,~]=sort(nc);
