@@ -21,7 +21,7 @@ sprintf('The number of objects is: %d', size(D,1))
 % nearest neighbors
 k=5:5:50;
 
-numK=[5 5];
+numK=[2 2 3 3 ];
 
 index=1;
 
@@ -34,7 +34,7 @@ if index>=0
 end
 
 % number of clusters
-c=5:50;
+c=5:150;
 
 num=size(D,1);
 

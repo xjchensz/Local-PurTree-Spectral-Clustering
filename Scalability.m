@@ -6,7 +6,7 @@ clc;
 clear all;
 
 folder_now = pwd;
-base=[folder_now,'\sacalability'];
+base=folder_now;
 
 addpath([folder_now, '\functions']);
 addpath([folder_now, '\draw']);
@@ -19,7 +19,7 @@ end
 
 
 % nearest neighbors
-k=20;
+k=10:5:50;
 
 % number of clusters
 c=5:5:50;
@@ -29,7 +29,7 @@ level=4;
 
 Q= zeros(length(path)+1,length(c)+1);
 Q(1,:)=[0,c];
-for i=1:length(path)
+for i=1:5
     %load data
     Q(i+1,1)=i;
     for j=1:level
@@ -38,19 +38,27 @@ for i=1:length(path)
     end
     sprintf('The number of objects in data%d is: %d', i, size(D,1))
     
-    for j=1:length(c)
-        try
-            [y, ~, ~, distX, ~]=LPS(D,c(j),k);
-            Q(i+1,j+1)=computeQ(distX,y);
-        catch
-            continue;
+    
+    for l=1:length(c)
+        maxQ=-10;
+        for j=1:length(k)
+            try
+                [y, ~, ~, distX, ~]=LPS(D,c(l),k(j));
+                q=computeQ(distX,y);
+                if q>maxQ
+                    maxQ=q;
+                end
+            catch
+                continue;
+            end
         end
+        Q(i+1,l+1)=maxQ;
     end
     clear D;
     sprintf('Q: %f', max(Q(i+1,2:length(c)+1)))
 end
 
-save([base '\Q.mat'],'Q');
+save([base '\Q_lps.mat'],'Q');
 
 
 
