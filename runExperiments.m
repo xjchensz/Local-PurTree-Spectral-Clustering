@@ -23,7 +23,7 @@ k=5:5:50;
 
 numK=[5 5];
 
-index=1;
+index=2;
 
 if index>=0
     start=0;
@@ -46,7 +46,7 @@ Q=zeros(length(k),length(c));
 for i=1:length(c)
     for j=1:length(k)
         try
-            [y, ~, W, distX, ~]=LPS(D,c(i),k(j));
+            [y, ~, W, distX, ~]=LPS(D,c(i),k(j),1,1);
         catch
             continue;
         end
@@ -65,10 +65,10 @@ if index>=0
     if ~exist(path,'dir')
         mkdir path;
     end
-    save([path '\lw',num2str(index),'.mat'],'lw');
-    save([path '\ncm',num2str(index),'.mat'],'ncm');
-    save([path '\wm',num2str(index),'.mat'],'wm');
-    save([path '\Q',num2str(index),'.mat'],'Q');
+    save([path '\lw',num2str(index+2),'.mat'],'lw');
+    save([path '\ncm',num2str(index+2),'.mat'],'ncm');
+    save([path '\wm',num2str(index+2),'.mat'],'wm');
+    save([path '\Q',num2str(index+2),'.mat'],'Q');
 else
     path=['.', path];
     save([path '\lw.mat'],'lw');
