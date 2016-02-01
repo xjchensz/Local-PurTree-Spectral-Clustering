@@ -29,7 +29,7 @@ level=4;
 
 Q= zeros(length(path)+1,length(c)+1);
 Q(1,:)=[0,c];
-for i=1:5
+for i=7:7
     %load data
     Q(i+1,1)=i;
     for j=1:level
@@ -47,6 +47,7 @@ for i=1:5
                 q=computeQ(distX,y);
                 if q>maxQ
                     maxQ=q;
+                    sprintf('Q: %f', maxQ)
                 end
             catch
                 continue;
