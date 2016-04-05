@@ -111,7 +111,7 @@ else
                     b(l,1)=b(l,1)+min(F,[],2);
                     b(l,2)=b(l,2)+max(F,[],2);
                 end
-            end
+            end 
             
             
             eek=0.5*sum(reshape(sum(dd,2),[level,1]).*b(:,2))/(2*level*rr(i)-sum(sum(dd,3),2));

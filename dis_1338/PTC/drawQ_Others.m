@@ -23,12 +23,13 @@ files{4,2}='hac_sl';
 files{4,1}='\Q_dbscan.csv';
 files{4,2}='dbscan';
 
+
 lineType={'b-*','r-*','k-*','c-*','g-*','m-*'};
 figure_FontSize=20;
 legend_FondSize=20;
 
 for i=1:size(files,1)
-    
+            
     Q=csvread([path, files{i,1}]);
     
     % number of clusters
