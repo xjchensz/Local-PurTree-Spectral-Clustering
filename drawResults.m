@@ -134,6 +134,41 @@ try
 catch
 end
 
+%draw k-Qmax
+
+figure('name','k_Qmax');
+hold on;
+
+h=plot(k,max(Q,[],2),lineType{1});
+xlabel('No. of nearest neighbors');
+ylabel('Moduality');
+
+grid on;
+hold off;
+try
+    saveas(h,['.',path,'\k_Qmax.jpg']);
+    saveas(h,['.',path,'\k_Qmax.eps']);
+catch
+end
+
+%draw k-Qmean
+
+figure('name','k_Qmean');
+hold on;
+
+h=plot(k,mean(Q,2,'omitnan'),lineType{1});
+xlabel('No. of nearest neighbors');
+ylabel('Moduality');
+
+grid on;
+hold off;
+try
+    saveas(h,['.',path,'\k_Qmean.jpg']);
+    saveas(h,['.',path,'\k_Qmean.eps']);
+catch
+end
+
+
 
 %draw c_Q
 
