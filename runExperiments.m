@@ -34,7 +34,7 @@ if index>=0
 end
 
 % number of clusters
-c=5:150;
+c=5:100;
 
 num=size(D,1);
 
