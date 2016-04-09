@@ -19,7 +19,7 @@ level=size(D,3);
 sprintf('The number of objects is: %d', size(D,1))
 
 % nearest neighbors
-k=5:5:50;
+k=5:5:100;
 
 numK=[5 5];
 
