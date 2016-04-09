@@ -50,14 +50,17 @@ if islocal
     [~, idx] = sort(distX,2);
     if nargin<6
         eta=0;
-        nn=0;
     end
+    el1=0;
+    el2=0;
+    eu1=0;
+    eu2=0;
     for i = 1:num
         id=idx(i,2:k+1);
         di = distX(id);
         ddk_1=k*DA(i,k+2,:)-sum(DA(i,2:k+1,:),2);
         ddk=k*DA(i,k+1,:)-sum(DA(i,2:k+1,:),2);
-        rr(i) = 0.5*(max(ddk)+min(ddk_1));
+        rr(i) = min(ddk_1);
         
         if nargin<6
             for l=1:level
@@ -68,12 +71,10 @@ if islocal
                 end
             end
             
-            eek=0.5*sum(reshape(sum(ddk,2),[level,1]).*b(:,2))/(2*level*rr(i)-sum(sum(ddk,3),2));
-            eek1=0.5*sum(reshape(sum(ddk_1,2),[level,1]).*b(:,1))/(2*level*rr(i)-sum(sum(ddk_1,3),2));
-            if eek>0 && eek1>0
-                eta=eta+0.5*(eek+eek1);
-                nn=nn+1;
-            end
+            el1=el1+sum(reshape(sum(ddk,2),[level,1]).*b(:,2));
+            el2=el2+sum(sum(ddk,3),2);
+            eu1=eu1+sum(reshape(sum(ddk_1,2),[level,1]).*b(:,1));
+            eu2=eu2+sum(sum(ddk_1,3),2); 
         end;
         
         P(i,id)=distX(idx(i,k+2))-di;
@@ -86,11 +87,7 @@ if islocal
     end
     
     if nargin<6
-        if nn<=0
-            eta=sum(DA(i,2:k+1,:));
-        else
-            eta=eta/nn;
-        end
+       eta=0.5*(el1/(2*level*sum(rr(i))-el2)+eu1/(2*level*sum(rr(i))-eu2));
     end
 else
     if nargin<6
@@ -98,6 +95,8 @@ else
         nn=0;
     end
     
+    e1=0;
+    eu=0;
     for i = 1:num
         di = distX(i,:);
         
@@ -111,10 +110,11 @@ else
                     b(l,1)=b(l,1)+min(F,[],2);
                     b(l,2)=b(l,2)+max(F,[],2);
                 end
-            end 
+            end
             
+            e1=e1+sum(reshape(sum(dd,2),[level,1]).*b(:,2));
+            e2=e2+sum(sum(dd,3),2);
             
-            eek=0.5*sum(reshape(sum(dd,2),[level,1]).*b(:,2))/(2*level*rr(i)-sum(sum(dd,3),2));
             if eek>0
                 eta=eta+eek;
                 nn=nn+1;
@@ -132,11 +132,7 @@ else
     end
     
     if nargin<6
-        if nn<=0
-            eta=sum(D(i,:,:));
-        else
-            eta=eta/nn;
-        end
+         eta=0.5*e1/(2*level*sum(rr(i))-e2);
     end
 end
 
