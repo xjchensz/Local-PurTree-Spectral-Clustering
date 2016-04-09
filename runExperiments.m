@@ -23,9 +23,10 @@ k=5:5:100;
 
 numK=[5 5 5 5];
 
-index=2;
+index=4;
+sprintf('Index: %d',index)
 
-if index>=0
+if index>0
     start=0;
     for i=1:index-1
         start=start+numK(i);
@@ -60,7 +61,7 @@ for i=1:length(c)
 end
 
 
-if index>=0
+if index>0
     path=[pwd, path, '\parts'];
     if ~exist(path,'dir')
         mkdir path;
