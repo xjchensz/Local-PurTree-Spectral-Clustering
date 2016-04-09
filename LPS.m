@@ -96,7 +96,7 @@ else
     end
     
     e1=0;
-    eu=0;
+    e2=0;
     for i = 1:num
         di = distX(i,:);
         

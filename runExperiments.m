@@ -21,7 +21,7 @@ sprintf('The number of objects is: %d', size(D,1))
 % nearest neighbors
 k=5:5:100;
 
-numK=[5 5];
+numK=[5 5 5 5];
 
 index=2;
 
@@ -65,10 +65,10 @@ if index>=0
     if ~exist(path,'dir')
         mkdir path;
     end
-    save([path '\lw',num2str(index+2),'.mat'],'lw');
-    save([path '\ncm',num2str(index+2),'.mat'],'ncm');
-    save([path '\wm',num2str(index+2),'.mat'],'wm');
-    save([path '\Q',num2str(index+2),'.mat'],'Q');
+    save([path '\lw',num2str(index),'.mat'],'lw');
+    save([path '\ncm',num2str(index),'.mat'],'ncm');
+    save([path '\wm',num2str(index),'.mat'],'wm');
+    save([path '\Q',num2str(index),'.mat'],'Q');
 else
     path=['.', path];
     save([path '\lw.mat'],'lw');
