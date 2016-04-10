@@ -23,7 +23,7 @@ k=5:5:100;
 
 numK=[7 5 5 3];
 
-index=1;
+index=2;
 sprintf('Index: %d',index)
 
 if index>0
@@ -39,7 +39,7 @@ c=5:100;
 
 num=size(D,1);
 
-lw=zeros(length(k),length(c));
+nlw=zeros(length(k),length(c));
 ncm=zeros(length(k),length(c));
 wm=zeros(length(k),length(c),level);
 Q=zeros(length(k),length(c));
@@ -54,7 +54,7 @@ for i=1:length(c)
         nc=length(unique(y));
         ncm(j,i)=nc;
         wm(j,i,:)=W;
-        lw(j,i)=logWK(distX,y);
+        nlw(j,i)=NLW(distX,y);
         Q(j,i)=computeQ(distX,y);
         sprintf('Q: %d', Q(j,i))
     end
@@ -66,13 +66,13 @@ if index>0
     if ~exist(path,'dir')
         mkdir path;
     end
-    save([path '\lw',num2str(index),'.mat'],'lw');
+    save([path '\nlw',num2str(index),'.mat'],'nlw');
     save([path '\ncm',num2str(index),'.mat'],'ncm');
     save([path '\wm',num2str(index),'.mat'],'wm');
     save([path '\Q',num2str(index),'.mat'],'Q');
 else
     path=['.', path];
-    save([path '\lw.mat'],'lw');
+    save([path '\nlw.mat'],'nlw');
     save([path '\ncm.mat'],'ncm');
     save([path '\wm.mat'],'wm');
     save([path '\Q.mat'],'Q');
