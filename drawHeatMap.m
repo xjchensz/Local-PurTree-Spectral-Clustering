@@ -19,10 +19,11 @@ level=size(D,3);
 sprintf('The number of objects is: %d', size(D,1))
 
 % nearest neighbors
-k=80;
-c=10;
+k=95;
+c=27;
 
-[y, ~, W, distX, ~]=LPS(D,c,k,1,1);
+[y, ~, W, distX, ~]=LPS(D,c,k,1);
+Q=computeQ(distX,y);
 
 dlmwrite([folder_now path '\origin.csv'],distX);
 

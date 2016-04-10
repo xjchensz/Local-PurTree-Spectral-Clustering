@@ -23,7 +23,7 @@ k=5:5:100;
 
 numK=[7 5 5 3];
 
-index=2;
+index=1;
 sprintf('Index: %d',index)
 
 if index>0

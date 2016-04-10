@@ -58,7 +58,7 @@ ylabel('Weights');
 hl=legend(labelW,'Location','NorthOutside');
 set(hl,'Fontsize',legend_FondSize);
 set(hl,'Orientation','horizon');
-set(gca,'ylim',[0 0.6]);
+set(gca,'ylim',[0.2 0.35]);
 
 saveas(h,['.',path,'\k_weights.jpg']);
 saveas(h,['.',path,'\k_weights.eps'],'psc2');
@@ -69,7 +69,7 @@ h=figure('name','c-Wegiths');
 set(get(gca,'XLabel'),'FontSize',figure_FontSize,'Vertical','top');
 set(get(gca,'YLabel'),'FontSize',figure_FontSize,'Horizontal','right');
 set(findobj('FontSize',10),'FontSize',figure_FontSize);
-set(gca,'ylim',[0 0.6]);
+set(gca,'ylim',[0.24 0.26]);
 hold on;
 mwm=zeros(length(nc),level);
 

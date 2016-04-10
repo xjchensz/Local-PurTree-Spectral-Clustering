@@ -15,7 +15,7 @@ load(['.',subpath,'\nlw1.mat'],'nlw');
 load(['.',subpath,'\ncm1.mat'],'ncm');
 load(['.',subpath,'\wm1.mat'],'wm');
 load(['.',subpath,'\Q1.mat'],'Q');
-lw1=lw;
+nlw1=nlw;
 ncm1=ncm;
 wm1=wm;
 Q1=Q;
@@ -26,13 +26,13 @@ for i=2:ed
     load(['.',subpath,['\ncm',num2str(i),'.mat']],'ncm');
     load(['.',subpath,['\wm',num2str(i),'.mat']],'wm');
     load(['.',subpath,['\Q',num2str(i),'.mat']],'Q');
-    lw1=[lw1;lw];
+    nlw1=[nlw1;nlw];
     ncm1=[ncm1;ncm];
     wm1=[wm1;wm];
     Q1=[Q1;Q];
 end
 
-lw=lw1;
+nlw=nlw1;
 ncm=ncm1;
 wm=wm1;
 Q=Q1;

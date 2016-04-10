@@ -104,6 +104,7 @@ if islocal
 %       eta=0.5*(el1/(2*level*sum(rr(i))-el2)+eu1/(2*level*sum(rr(i))-eu2));
 %       eta=median(max(ee1,ee2),'omitnan');
         eta=0.5*max(ee);
+%         eta=0.1*eta;
     end
 else
     if nargin<6
