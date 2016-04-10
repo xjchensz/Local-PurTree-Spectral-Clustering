@@ -65,8 +65,8 @@ if islocal
         rr(i) = min(ddk_1);
         
         if nargin<6
-            ddk=level*sum(DA(i,2:k+1,:),2)-sum(sum(DA(i,2:k+1,:),2),3);
-            ee(:)=ee(:)+reshape(ddk, [level 1]);
+            ddk=level*DA(i,2:k+1,:)-repmat(sum(DA(i,2:k+1,:),3),1,1,level);
+            ee(:)=ee(:)+reshape(max(ddk,[] ,2),[level 1]);
 %             for l=1:level
 %                 for h=1:level
 %                     F=DA(i,2:k+1,h)-DA(i,2:k+1,l);
@@ -103,7 +103,7 @@ if islocal
     if nargin<6
 %       eta=0.5*(el1/(2*level*sum(rr(i))-el2)+eu1/(2*level*sum(rr(i))-eu2));
 %       eta=median(max(ee1,ee2),'omitnan');
-        eta=0.5*max(ee)/k;
+        eta=0.5*max(ee);
     end
 else
     if nargin<6
