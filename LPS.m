@@ -62,7 +62,7 @@ if islocal
         id=idx(i,2:k+1);
         di = distX(id);
         ddk_1=k*DA(i,k+2,:)-sum(DA(i,2:k+1,:),2);
-        rr(i) = min(ddk_1);
+        rr(i) = min(ddk_1(ddk_1>0));
         
         if nargin<6
             ddk=level*DA(i,2:k+1,:)-repmat(sum(DA(i,2:k+1,:),3),1,1,level);
@@ -153,7 +153,7 @@ else
     end
 end
 
-if nargin<4 || negativeEta
+if negativeEta
     eta=-eta;
 end
 
@@ -190,10 +190,10 @@ for iter = 1:NITER
     
     %update distance
     distX=computeWeightDistance(W,D);%full dist--weight distance
-    [~, idx] = sort(distX,2);
-    if islocal
-        idx=idx(:,2:k+1);
-    end
+%     [~, idx] = sort(distX,2);
+%     if islocal
+%         idx=idx(:,2:k+1);
+%     end
     
     
     % compute P
