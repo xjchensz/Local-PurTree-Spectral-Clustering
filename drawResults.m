@@ -23,15 +23,15 @@ level = size(wm,3);
 
 
 % nearest neighbors
-k=5:5:50;
+k=5:5:100;
 
 % number of clusters
-c=5:150;
+c=5:100;
 
 nc=unique(ncm);
 [nc,~]=sort(nc);
 [~,~,ncv]=find(nc);
-nc=ncv(ncv<=150);
+nc=ncv(ncv<=100);
 
 lineType={'b-*','r-+','k-o','c-x','g-*','c-.','m-s'};
 
@@ -208,14 +208,14 @@ for j=1:length(nc)
 end
 id=~isnan(maxQ);
 plot(nc(id),maxQ(id),lineType{1});
-axis([ 5 150 0 0.15])
+axis([ 5 100 0 0.15])
 
 grid on;
 hold off;
 xlabel('c');
 ylabel('Moduality');
 
-saveas(h,['.',path,'\c_Qmax_lpt.eps'],'psc2');
-saveas(h,['.',path,'\c_Qmax_lpt.jpg']);
+saveas(h,['.',path,'\c_Qmax_lps.eps'],'psc2');
+saveas(h,['.',path,'\c_Qmax_lps.jpg']);
 
 %%

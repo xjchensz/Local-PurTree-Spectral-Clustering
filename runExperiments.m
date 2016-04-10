@@ -21,9 +21,9 @@ sprintf('The number of objects is: %d', size(D,1))
 % nearest neighbors
 k=5:5:100;
 
-numK=[5 5 5 5];
+numK=[7 5 4 4];
 
-index=3;
+index=1;
 sprintf('Index: %d',index)
 
 if index>0
@@ -47,7 +47,7 @@ Q=zeros(length(k),length(c));
 for i=1:length(c)
     for j=1:length(k)
         try
-            [y, ~, W, distX, ~]=LPS(D,c(i),k(j),1,1);
+            [y, ~, W, distX, ~]=LPS(D,c(i),k(j),1);
         catch
             continue;
         end

@@ -1,4 +1,4 @@
-function [y, P, W, distX, evs] = LPS(D, c, k, negativeEta, islocal, eta)
+function [y, P, W, distX, evs] = LPS(D, c, k,islocal, negativeEta,  eta)
 
 % D: num*num*level distance matrix, each sub matrix ia the level distance matrix
 % c: number of clusters
@@ -29,11 +29,11 @@ if k>num-2
 end;
 
 if nargin<4
-    negativeEta=0;
+    islocal=1;
 end;
 
 if nargin<5
-    islocal=1;
+    negativeEta=0;
 end;
 
 
@@ -42,6 +42,9 @@ P = zeros(num,num);
 W = zeros(level,1);%weights
 W(:) = 1/level;
 rr = zeros(num,1);
+% ee1=zeros(num,1);
+% ee2=zeros(num,1);
+ee=zeros(level,1);
 distX=computeWeightDistance(W,D);
 b=zeros(level,2);
 
@@ -51,30 +54,41 @@ if islocal
     if nargin<6
         eta=0;
     end
-    el1=0;
-    el2=0;
-    eu1=0;
-    eu2=0;
+%     el1=0;
+%     el2=0;
+%     eu1=0;
+%     eu2=0;
     for i = 1:num
         id=idx(i,2:k+1);
         di = distX(id);
         ddk_1=k*DA(i,k+2,:)-sum(DA(i,2:k+1,:),2);
-        ddk=k*DA(i,k+1,:)-sum(DA(i,2:k+1,:),2);
         rr(i) = min(ddk_1);
         
         if nargin<6
-            for l=1:level
-                for h=1:level
-                    F=DA(i,2:k+1,h)-DA(i,2:k+1,l);
-                    b(l,1)=b(l,1)+min(F,[],2);
-                    b(l,2)=b(l,2)+max(F,[],2);
-                end
-            end
+            ddk=level*sum(DA(i,2:k+1,:),2)-sum(sum(DA(i,2:k+1,:),2),3);
+            ee(:)=ee(:)+reshape(ddk, [level 1]);
+%             for l=1:level
+%                 for h=1:level
+%                     F=DA(i,2:k+1,h)-DA(i,2:k+1,l);
+%                     b(l,1)=b(l,1)+mean(F);                                        
+%                     b(l,2)=b(l,2)+max(F,[],2);  
+%                 end
+%             end
             
-            el1=el1+sum(reshape(sum(ddk,2),[level,1]).*b(:,2));
-            el2=el2+sum(sum(ddk,3),2);
-            eu1=eu1+sum(reshape(sum(ddk_1,2),[level,1]).*b(:,1));
-            eu2=eu2+sum(sum(ddk_1,3),2); 
+%             ee1(i)=0.5*sum(reshape(sum(ddk,2),[level,1]).*b(:,2))/(2*level*rr(i)-sum(sum(ddk,3),2));
+%             if ee1(i)<=0
+%                 ee1(i)=NaN;
+%             end
+%             
+%             ee2(i)=0.5*sum(reshape(sum(ddk_1,2),[level,1]).*b(:,1))/(2*level*rr(i)-sum(sum(ddk_1,3),2));
+%             if ee2(i)<=0
+%                 ee2(i)=NaN;
+%             end
+            
+%             el1=el1+sum(reshape(sum(ddk,2),[level,1]).*b(:,2));
+%             el2=el2+sum(sum(ddk,3),2);
+%             eu1=eu1+sum(reshape(sum(ddk_1,2),[level,1]).*b(:,1));
+%             eu2=eu2+sum(sum(ddk_1,3),2); 
         end;
         
         P(i,id)=distX(idx(i,k+2))-di;
@@ -87,7 +101,9 @@ if islocal
     end
     
     if nargin<6
-       eta=0.5*(el1/(2*level*sum(rr(i))-el2)+eu1/(2*level*sum(rr(i))-eu2));
+%       eta=0.5*(el1/(2*level*sum(rr(i))-el2)+eu1/(2*level*sum(rr(i))-eu2));
+%       eta=median(max(ee1,ee2),'omitnan');
+        eta=0.5*max(ee)/k;
     end
 else
     if nargin<6
@@ -112,8 +128,8 @@ else
                 end
             end
             
-            e1=e1+sum(reshape(sum(dd,2),[level,1]).*b(:,2));
-            e2=e2+sum(sum(dd,3),2);
+%             e1=e1+sum(reshape(sum(dd,2),[level,1]).*b(:,2));
+%             e2=e2+sum(sum(dd,3),2);
             
             if eek>0
                 eta=eta+eek;
@@ -132,15 +148,15 @@ else
     end
     
     if nargin<6
-         eta=0.5*e1/(2*level*sum(rr(i))-e2);
+%          eta=0.5*e1/(2*level*sum(rr(i))-e2);
     end
 end
 
-if nargin<6 && negativeEta
+if nargin<4 || negativeEta
     eta=-eta;
 end
 
-r = mean(rr);
+r = median(rr);
 lambda = mean(rr);
 P0 = (P+P')/2;
 D0 = diag(sum(P0));
@@ -168,8 +184,7 @@ for iter = 1:NITER
             end
         end
     end
-    W=mean(W)-W;
-    W=1/level+W/(2*eta);
+    W=-W/(2*eta);
     W=positiveNorm(W);
     
     %update distance
@@ -187,13 +202,10 @@ for iter = 1:NITER
     for i=1:num
         if islocal == 1
             id=idx(i,:);
-            E=(distX(i,id)+lambda*distf(i,id))/(2*r);
-            E = mean(E)-E + 1/k;
+            E=-(distX(i,id)+lambda*distf(i,id))/(2*r);
             P(i,id) = positiveNorm(E);
         else
-            E=(distX(i,:)+lambda*distf(i,:))/(2*r);
-            E(i)=0;
-            E = mean(E)-E + 1/num;
+            E=-(distX(i,:)+lambda*distf(i,:))/(2*r);
             E(i)=0;
             P(i,:) = positiveNorm(E);
         end;
