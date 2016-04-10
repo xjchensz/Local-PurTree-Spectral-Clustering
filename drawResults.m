@@ -9,7 +9,7 @@ addpath([folder_now, path]);
 addpath([folder_now, '\functions']);
 addpath([folder_now, '\draw']);
 
-load(['.',path,'\lw.mat'],'lw');
+load(['.',path,'\nlw.mat'],'nlw');
 load(['.',path,'\ncm.mat'],'ncm');
 load(['.',path,'\wm.mat'],'wm');
 load(['.',path,'\Q.mat'],'Q');

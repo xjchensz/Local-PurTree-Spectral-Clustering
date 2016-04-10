@@ -11,7 +11,7 @@ subpath=[path,'\parts'];
 addpath([folder_now, path]);
 
 
-load(['.',subpath,'\lw1.mat'],'lw');
+load(['.',subpath,'\nlw1.mat'],'nlw');
 load(['.',subpath,'\ncm1.mat'],'ncm');
 load(['.',subpath,'\wm1.mat'],'wm');
 load(['.',subpath,'\Q1.mat'],'Q');
@@ -22,7 +22,7 @@ Q1=Q;
 
 ed=4;
 for i=2:ed
-    load(['.',subpath,['\lw', num2str(i), '.mat']],'lw');
+    load(['.',subpath,['\nlw', num2str(i), '.mat']],'nlw');
     load(['.',subpath,['\ncm',num2str(i),'.mat']],'ncm');
     load(['.',subpath,['\wm',num2str(i),'.mat']],'wm');
     load(['.',subpath,['\Q',num2str(i),'.mat']],'Q');
@@ -37,7 +37,7 @@ ncm=ncm1;
 wm=wm1;
 Q=Q1;
 
-save(['.',path,'\lw.mat'],'lw');
+save(['.',path,'\nlw.mat'],'nlw');
 save(['.',path,'\ncm.mat'],'ncm');
 save(['.',path,'\wm.mat'],'wm');
 save(['.',path,'\Q.mat'],'Q');
