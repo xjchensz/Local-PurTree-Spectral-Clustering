@@ -158,7 +158,7 @@ if negativeEta
 end
 
 r = median(rr);
-lambda = mean(rr);
+lambda = median(rr);
 P0 = (P+P')/2;
 D0 = diag(sum(P0));
 L0 = D0 - P0;
@@ -167,6 +167,10 @@ L0 = D0 - P0;
 % if sum(evs(1:c+1)) < 0.00000000001
 %     error('The original graph has more than %d connected component', c);
 % end;
+
+    if islocal
+        idx=idx(:,2:k+1);
+    end
 
 for iter = 1:NITER
     

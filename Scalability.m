@@ -33,9 +33,9 @@ k=10:10:100;
 c=5:5:100;
 
 
-numData=[2 1 1];
+numData=[1 1 1 1];
 
-index=1;
+index=2;
 sprintf('Index: %d',index)
 di=1:4;
 
