@@ -62,7 +62,13 @@ if islocal
         id=idx(i,2:k+1);
         di = distX(id);
         ddk_1=k*DA(i,k+2,:)-sum(DA(i,2:k+1,:),2);
-        rr(i) = min(ddk_1(ddk_1>0));
+        mv= min(ddk_1(ddk_1>0));
+        if isempty(mv)
+            rr(i) = NaN;
+        else
+            rr(i) = mv;
+        end
+        
         
         if nargin<6
             ddk=level*DA(i,2:k+1,:)-repmat(sum(DA(i,2:k+1,:),3),1,1,level);
@@ -156,8 +162,8 @@ if negativeEta
     eta=-eta;
 end
 
-r = median(rr);
-lambda = median(rr);
+r = median(rr,'omitnan');
+lambda = r;
 P0 = (P+P')/2;
 D0 = diag(sum(P0));
 L0 = D0 - P0;

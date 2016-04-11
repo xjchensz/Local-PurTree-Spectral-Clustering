@@ -63,19 +63,22 @@ for i=1:length(di)
     maxNLW=-10;
     for l=1:length(c)
         for j=1:length(k)
-            try
+             try
                 [y, ~, ~, distX, ~]=LPS(D,c(l),k(j));
                 q=computeQ(distX,y);
                 if q>maxQ
                     maxQ=q;
+                    sprintf('Q: %f', maxQ);
                 end
                 nw=NLW(distX,y);
                 if nw>maxNLW
                     maxNLW=nw;
+                    sprintf('NLW: %f', maxNLW);
                 end
-            catch
-                continue;
-            end
+             catch err
+                 disp(err);
+                 continue;
+             end
         end
     end
     clear D;
