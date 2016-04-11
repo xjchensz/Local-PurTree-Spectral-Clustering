@@ -112,8 +112,7 @@ else
         nn=0;
     end
     
-    e1=0;
-    e2=0;
+
     for i = 1:num
         di = distX(i,:);
         
@@ -229,14 +228,14 @@ for iter = 1:NITER
     if fn1 > 1e-11
         % more clusters than expected
         lambda = 1.2*lambda;
-        if nargin<6
-            eta=eta*1.2;
-        end
+%         if nargin<6
+%             eta=eta*1.2;
+%         end
     elseif fn2 < 1e-11
         lambda = lambda/1.1;
-        if nargin<6
-            eta=eta/1.1;
-        end
+%         if nargin<6
+%             eta=eta/1.1;
+%         end
         F = F_old;
     else
         break;

@@ -35,7 +35,7 @@ c=5:5:100;
 
 numData=[1 1 1 1];
 
-index=2;
+index=4;
 sprintf('Index: %d',index)
 di=1:4;
 
