@@ -30,7 +30,7 @@ files{4,2}='4';
 k=10:10:100;
 
 % number of clusters
-c=10:10:100;
+c=5:5:100;
 
 
 numData=[1 1 1 1];
@@ -48,8 +48,8 @@ if index>0
 end
 
 
-Q= zeros(length(di),1);
-nlw= zeros(length(di),1);
+Q= zeros(length(di),length(c),length(k));
+nlw= zeros(length(di),length(c),length(k));
 for i=1:length(di)
     %load data
     level=str2num(files{di(i),2});
@@ -66,14 +66,16 @@ for i=1:length(di)
              try
                 [y, ~, ~, distX, ~]=LPS(D,c(l),k(j));
                 q=computeQ(distX,y);
+                Q(i,l,j)=q;
                 if q>maxQ
                     maxQ=q;
-                    sprintf('Q: %f', maxQ);
+                    sprintf('Q: %f', q)
                 end
                 nw=NLW(distX,y);
+                nlw(i,l,j)=nw;
                 if nw>maxNLW
                     maxNLW=nw;
-                    sprintf('NLW: %f', maxNLW);
+                    sprintf('NLW: %f', nw)
                 end
              catch err
                  disp(err);
@@ -82,14 +84,12 @@ for i=1:length(di)
         end
     end
     clear D;
-    Q(i)=maxQ;
     sprintf('Q: %f', maxQ);
-    nlw(i)=maxNLW;
     sprintf('NLW: %f', maxNLW);
 end
 
 if index>0
-    save([base '\Q_lps' num2str(index) '.mat'],'Q');
+    save([base '\Q' num2str(index) '_lps.mat'],'Q');
     save([base '\nlw' num2str(index) '_lps.mat'],'nlw');
 else
     save([base '\Q_lps.mat'],'Q');
