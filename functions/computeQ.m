@@ -5,6 +5,7 @@ cluster=unique(y);
 Q=0;
 
 simX=1-distX;
+simX=simX+diag(-diag(simX));
 
 s=sum(simX,2);
 m=sum(s);
