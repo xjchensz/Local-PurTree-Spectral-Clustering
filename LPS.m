@@ -49,7 +49,6 @@ distX=computeWeightDistance(W,D);
 b=zeros(level,2);
 
 if islocal
-    DA = sort(D,2);
     [~, idx] = sort(distX,2);
     if nargin<6
         eta=0;
@@ -60,19 +59,18 @@ if islocal
 %     eu2=0;
     for i = 1:num
         id=idx(i,2:k+1);
-        di = distX(id);
-        ddk_1=k*DA(i,k+2,:)-sum(DA(i,2:k+1,:),2);
-        mv= min(ddk_1(ddk_1>0));
-        if isempty(mv)
-            rr(i) = NaN;
-        else
-            rr(i) = mv;
-        end
-        
+        ddk_1=k*D(i,idx(i,k+2),:)-sum(D(i,idx(i,2:k+1),:),2);
+%         mv= min(ddk_1(ddk_1>0));
+%         if isempty(mv)
+%             rr(i) = NaN;
+%         else
+%             rr(i) = mv;
+%         end
+        rr(i)=mean(ddk_1);      
         
         if nargin<6
-            ddk=level*DA(i,2:k+1,:)-repmat(sum(DA(i,2:k+1,:),3),1,1,level);
-            ee(:)=ee(:)+reshape(max(ddk,[] ,2),[level 1]);
+            ddk=level*D(i,idx(i,2:k+1),:)-repmat(sum(D(i,idx(i,2:k+1),:),3),1,1,level);
+            ee(:)=ee(:)+reshape(mean(ddk,2),[level 1]);
 %             for l=1:level
 %                 for h=1:level
 %                     F=DA(i,2:k+1,h)-DA(i,2:k+1,l);
@@ -97,7 +95,8 @@ if islocal
 %             eu2=eu2+sum(sum(ddk_1,3),2); 
         end;
         
-        P(i,id)=distX(idx(i,k+2))-di;
+        di=distX(i,idx(i,2:k+1));
+        P(i,id)=distX(i,idx(i,k+2))-di;
         y=sum(P(i,:));
         if y==0
             P(i,id)=1/k;
@@ -162,7 +161,7 @@ if negativeEta
     eta=-eta;
 end
 
-r = median(rr,'omitnan');
+r = 0.5*median(rr,'omitnan');
 lambda = r;
 P0 = (P+P')/2;
 D0 = diag(sum(P0));

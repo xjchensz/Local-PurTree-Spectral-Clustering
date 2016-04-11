@@ -30,12 +30,12 @@ files{4,2}='4';
 k=10:10:100;
 
 % number of clusters
-c=5:5:100;
+c=10:10:100;
 
 
 numData=[1 1 1 1];
 
-index=4;
+index=2;
 sprintf('Index: %d',index)
 di=1:4;
 
