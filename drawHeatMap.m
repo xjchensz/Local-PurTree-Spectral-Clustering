@@ -20,7 +20,7 @@ sprintf('The number of objects is: %d', size(D,1))
 
 % nearest neighbors
 k=95;
-c=27;
+c=30;
 
 [y, ~, W, distX, ~]=LPS(D,c,k,1);
 Q=computeQ(distX,y);

@@ -19,12 +19,14 @@ files{1,2}='5';
 files{2,1}='\D2\dis_795';
 files{2,2}='3';
 
-files{3,1}='\D4\dis_2676';
+files{3,1}='\D3\dis_1500';
 files{3,2}='4';
 
-files{4,1}='\D5\dis_5352';
+files{4,1}='\D5\dis_2000';
 files{4,2}='4';
 
+files{5,1}='\D6\dis_2676';
+files{5,2}='4';
 
 % nearest neighbors
 k=10:10:100;
@@ -33,11 +35,11 @@ k=10:10:100;
 c=5:5:100;
 
 
-numData=[1 1 1 1];
+numData=[3 1 1];
 
-index=2;
+index=1;
 sprintf('Index: %d',index)
-di=1:4;
+di=1:3;
 
 if index>0
     start=0;
