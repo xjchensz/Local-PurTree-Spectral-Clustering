@@ -11,7 +11,7 @@ base=folder_now;
 addpath([folder_now, '\functions']);
 addpath([folder_now, '\draw']);
 
-path=cell(10,2);
+files=cell(5,2);
 
 files{1,1}='\D1\dis_202';
 files{1,2}='5';
@@ -37,9 +37,9 @@ c=5:5:100;
 
 numData=[3 1 1];
 
-index=1;
+index=3;
 sprintf('Index: %d',index)
-di=1:3;
+di=1:size(files,1);
 
 if index>0
     start=0;
