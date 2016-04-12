@@ -21,9 +21,9 @@ sprintf('The number of objects is: %d', size(D,1))
 % nearest neighbors
 k=5:5:100;
 
-numK=[14 6];
+numK=[6 5 5 4];
 
-index=3;
+index=1;
 sprintf('Index: %d',index)
 
 if index>0

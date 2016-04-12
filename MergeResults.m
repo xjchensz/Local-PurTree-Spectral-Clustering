@@ -20,7 +20,7 @@ ncm1=ncm;
 wm1=wm;
 Q1=Q;
 
-ed=4;
+ed=2;
 for i=2:ed
     load(['.',subpath,['\nlw', num2str(i), '.mat']],'nlw');
     load(['.',subpath,['\ncm',num2str(i),'.mat']],'ncm');

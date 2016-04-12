@@ -70,7 +70,7 @@ if islocal
         
         if nargin<6
             ddk=level*D(i,idx(i,2:k+1),:)-repmat(sum(D(i,idx(i,2:k+1),:),3),1,1,level);
-            ee(:)=ee(:)+reshape(mean(ddk,2),[level 1]);
+            ee(:)=ee(:)+reshape(max(ddk,[],2),[level 1]);
 %             for l=1:level
 %                 for h=1:level
 %                     F=DA(i,2:k+1,h)-DA(i,2:k+1,l);
