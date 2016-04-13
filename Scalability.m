@@ -31,13 +31,13 @@ files{5,2}='4';
 % nearest neighbors
 k=10:10:100;
 
-% number of clusters
+% number of cl
 c=5:5:100;
 
 
 numData=[3 1 1];
 
-index=3;
+index=2;
 sprintf('Index: %d',index)
 di=1:size(files,1);
 
