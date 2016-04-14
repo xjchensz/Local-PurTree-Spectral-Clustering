@@ -11,7 +11,7 @@ base=folder_now;
 addpath([folder_now, '\functions']);
 addpath([folder_now, '\draw']);
 
-files=cell(5,2);
+files=cell(6,2);
 
 files{1,1}='\D1\dis_202';
 files{1,2}='5';
@@ -19,14 +19,17 @@ files{1,2}='5';
 files{2,1}='\D2\dis_795';
 files{2,2}='3';
 
-files{3,1}='\D3\dis_1500';
+files{3,1}='\dis_1338\dis_1338';
 files{3,2}='4';
 
-files{4,1}='\D5\dis_2000';
+files{4,1}='\D4\dis_1500';
 files{4,2}='4';
 
-files{5,1}='\D6\dis_2676';
+files{5,1}='\D5\dis_2000';
 files{5,2}='4';
+
+files{6,1}='\D6\dis_2676';
+files{7,2}='4';
 
 % nearest neighbors
 k=10:10:100;
