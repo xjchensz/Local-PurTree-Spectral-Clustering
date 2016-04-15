@@ -30,7 +30,14 @@ for i=1:size(distX,1)
 end
 
 ax=sum(distX*weighta,2);
-bx=min(distX*weightb,[],2);
+temp=distX*weightb;
+for i=1:size(distX,1)
+    temp(y(i))=NaN;
+end
+
+bx=min(temp,[],2);
+
+
 diffx=(bx-ax)./max(ax,bx);
 
 si=sum(diffx.*ww)/sum(sz);
