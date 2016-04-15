@@ -12,25 +12,25 @@ for i=1:length(cluster)
 end
 w=1./sz;
 
-weighta=zeros(size(distX,1),length(cluster));
-weightb=zeros(size(distX,1),length(cluster));
+weighta=zeros(size(distX,1),size(distX,1));
+weightb=zeros(size(distX,1),size(distX,1));
 ww=zeros(size(distX,1),1);
 for i=1:size(distX,1)
     if sz(y(i))>1
-         weighta(i,y(i))=1/(sz(y(i))-1);
+         weighta(i,find(y==cluster(i)))=1/(sz(y(i))-1);
     end
    
     for j=1:length(cluster)
         if j~=y(i)
-            weightb(i,j)= w(j);
+            weightb(i,find(y==cluster(j)))= w(j);
         end
     end
     
     ww(i)=w(y(i));
 end
 
-ax=sum(distX*weighta,2);
-temp=distX*weightb;
+ax=sum(distX.*weighta,2);
+temp=distX.*weightb;
 for i=1:size(distX,1)
     temp(y(i))=NaN;
 end
