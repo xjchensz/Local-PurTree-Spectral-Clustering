@@ -84,6 +84,12 @@ for i=1:length(di)
                     maxNLW=nw;
                     sprintf('NLW: %f', nw)
                 end
+                si=SilhouetteIndex(distX,y);
+                SI(i,l,j)=si;
+                if si>maxSI
+                    maxSI=si;
+                    sprintf('SI: %f', si)
+                end
              catch err
                  disp(err);
                  continue;

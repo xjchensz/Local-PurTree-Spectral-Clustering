@@ -16,7 +16,7 @@ weighta=zeros(size(distX,1),length(cluster));
 weightb=zeros(size(distX,1),length(cluster));
 ww=zeros(size(distX,1),1);
 for i=1:size(distX,1)
-    if sz(y(i))>0
+    if sz(y(i))>1
          weighta(i,y(i))=1/(sz(y(i))-1);
     end
    
