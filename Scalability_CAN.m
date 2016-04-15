@@ -38,7 +38,7 @@ k=10:10:100;
 c=5:5:100;
 
 
-numData=[5];
+numData=[1 1 1 1 1 1];
 
 index=2;
 sprintf('Index: %d',index)
@@ -55,6 +55,7 @@ end
 
 Q= zeros(length(di),length(c),length(k));
 nlw= zeros(length(di),length(c),length(k));
+SI=zeros(length(di),length(c),length(k));
 for i=1:length(di)
     %load data
     D=csvread([folder_now files{di(i),1},'\dis_jaccard.csv']);
@@ -62,6 +63,7 @@ for i=1:length(di)
     
     maxQ=-10;
     maxNLW=-10;
+    maxSI=-1000;
     for l=1:length(c)
         for j=1:length(k)
              try
@@ -77,6 +79,12 @@ for i=1:length(di)
                 if nw>maxNLW
                     maxNLW=nw;
                     sprintf('NLW: %f', nw)
+                end
+                si=SilhouetteIndex(D,y);
+                SI(i,l,j)=si;
+                if si>maxSI
+                    maxSI=si;
+                    sprintf('SI: %f', si)
                 end
              catch err
                  disp(err);

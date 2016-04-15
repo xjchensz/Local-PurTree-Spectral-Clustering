@@ -55,6 +55,7 @@ end
 
 Q= zeros(length(di),length(c),length(k));
 nlw= zeros(length(di),length(c),length(k));
+SI=zeros(length(di),length(c),length(k));
 for i=1:length(di)
     %load data
     level=str2num(files{di(i),2});
@@ -66,6 +67,7 @@ for i=1:length(di)
     
     maxQ=-10;
     maxNLW=-10;
+    maxSI=-1000;
     for l=1:length(c)
         for j=1:length(k)
              try
