@@ -190,7 +190,7 @@ for iter = 1:NITER
         for l=1:level
             for i=1:num
                 W(l,1)= W(l,1)+sum(D(i,:,l).*P(i,:));
-            end
+                endl
         end
     end
     W=-W/(2*eta);
