@@ -40,7 +40,7 @@ c=5:5:100;
 
 numData=[1 1 1 1 1 1];
 
-index=2;
+index=1;
 sprintf('Index: %d',index)
 di=1:size(files,1);
 
@@ -56,6 +56,7 @@ end
 Q= zeros(length(di),length(c),length(k));
 nlw= zeros(length(di),length(c),length(k));
 SI=zeros(length(di),length(c),length(k));
+DI=zeros(length(di),length(c),length(k));
 for i=1:length(di)
     %load data
     level=str2num(files{di(i),2});
@@ -68,6 +69,7 @@ for i=1:length(di)
     maxQ=-10;
     maxNLW=-10;
     maxSI=-1000;
+    maxDI=-1000;
     for l=1:length(c)
         for j=1:length(k)
              try
@@ -89,6 +91,13 @@ for i=1:length(di)
                 if si>maxSI
                     maxSI=si;
                     sprintf('SI: %f', si)
+                end
+                
+                di=DunnIndex(distX,y);
+                DI(i,l,j)=di;
+                if di>maxDI
+                    maxDI=di;
+                    sprintf('DI: %f', di)
                 end
              catch err
                  disp(err);
