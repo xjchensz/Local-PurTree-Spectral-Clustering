@@ -5,8 +5,6 @@ function [ di ] = DunnIndex(  distX, y  )
 
 cluster=unique(y);
 
-clusterDis=zeros(length(cluster),length(cluster));
-
 mindis=zeros(length(cluster),length(cluster));
 maxdis=zeros(length(cluster),1);
 for i=1:length(cluster)
